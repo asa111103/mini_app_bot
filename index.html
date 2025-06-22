@@ -64,12 +64,14 @@
                 <div>
                     <label for="phone" class="block text-sm font-medium mb-1">Телефон</label>
                     <input type="tel" id="phone" required
-                        class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none">
+                        class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none"
+                        placeholder="+7 (XXX) XXX-XX-XX">
                 </div>
                 <div>
                     <label for="vk" class="block text-sm font-medium mb-1">Ссылка VK</label>
                     <input type="url" id="vk" required
-                        class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none">
+                        class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none"
+                        placeholder="https://vk.com/username">
                 </div>
                 <div>
                     <label for="reg-password" class="block text-sm font-medium mb-1">Пароль</label>
@@ -202,6 +204,12 @@
             // Обработчики форм
             document.getElementById('register-form').addEventListener('submit', registerUser );
             document.getElementById('login-form').addEventListener('submit', loginUser );
+            // Маска для телефона
+            const phoneInput = document.getElementById('phone');
+            phoneInput.addEventListener('input', function(e) {
+                const x = e.target.value.replace(/\D/g, '').match(/(\d{0,1})(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/);
+                e.target.value = !x[2] ? x[1] : '+7 (' + x[2] + (x[3] ? ') ' + x[3] : '') + (x[4] ? '-' + x[4] : '') + (x[5] ? '-' + x[5] : '');
+            });
         });
         // Показать форму входа
         function showLogin() {
