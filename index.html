@@ -270,6 +270,10 @@
     <script>
         // Проверяем, запущено ли приложение в Telegram WebApp
         const isTelegram = window.Telegram && window.Telegram.WebApp;
+        console.log('WebApp initData:', Telegram.WebApp.initData);
+        console.log('WebApp version:', Telegram.WebApp.version);
+        // Проверка методов
+        console.log('sendData available:', typeof Telegram.WebApp.sendData === 'function');
         
         // Инициализация при загрузке
         document.addEventListener('DOMContentLoaded', function() {
