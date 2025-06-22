@@ -318,7 +318,7 @@
             showLoader('login');
             
             // Отправляем запрос на проверку авторизации
-            Telegram.WebApp.answerWebAppQuery(JSON.stringify({
+            Telegram.WebApp.sendData(JSON.stringify({
                 action: 'check_auth',
                 user: {
                     username: document.getElementById('login-username').value
@@ -451,7 +451,7 @@
             };
             
             // Отправляем данные в бота через Telegram WebApp
-            Telegram.WebApp.answerWebAppQuery(JSON.stringify(userData));
+            Telegram.WebApp.sendData(JSON.stringify(userData));
         }
 
         // Вход пользователя
@@ -473,7 +473,7 @@
             };
             
             // Отправляем данные в бота через Telegram WebApp
-            Telegram.WebApp.answerWebAppQuery(JSON.stringify(loginData));
+            Telegram.WebApp.sendData(JSON.stringify(loginData));
         }
 
         // Восстановление пароля
@@ -495,7 +495,7 @@
             };
             
             // Отправляем данные в бота через Telegram WebApp
-            Telegram.WebApp.answerWebAppQuery(JSON.stringify(recoveryData));
+            Telegram.WebApp.sendData(JSON.stringify(recoveryData));
         }
 
         // Изменение пароля
@@ -531,7 +531,7 @@
             };
             
             // Отправляем данные в бота через Telegram WebApp
-            Telegram.WebApp.answerWebAppQuery(JSON.stringify(changePasswordData));
+            Telegram.WebApp.sendData(JSON.stringify(changePasswordData));
         }
 
         // Выход из системы
