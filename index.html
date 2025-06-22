@@ -231,13 +231,13 @@
             // Заполняем данные пользователя
             document.getElementById('user-fio').textContent = user.FIO_волонтера;
             document.getElementById('user-username').textContent = user.Имя_пользователя;
-            const options = { year: 'numeric', month: 'long', day: 'numeric' };
             document.getElementById('user-dob').textContent = user.Дата_рождения);
             document.getElementById('user-institute').textContent = user.Институт;
             document.getElementById('user-group').textContent = user.Группа;
             document.getElementById('user-phone').textContent = user.Телефон;
             document.getElementById('user-vk').textContent = user.Ссылка_VK;
             // Форматируем дату регистрации
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
             const regDate = new Date(user.Дата_Регистрации);
             document.getElementById('reg-date').textContent = regDate.toLocaleDateString('ru-RU', options);
             // Сохраняем обновленные данные
@@ -259,6 +259,7 @@
             const confirmPassword = document.getElementById('reg-confirm').value;
             // Валидация
             const errorElement = document.getElementById('register-error');
+            
             if (!fio) {
                 errorElement.textContent = 'Укажите ФИО волонтера';
                 errorElement.classList.remove('hidden');
@@ -283,7 +284,7 @@
                 return;
             }
 
-            if (!phone || phone.length < 5) {
+            if (!phone || phone.length < 11) {
                 errorElement.textContent = 'Укажите корректный номер телефона';
                 errorElement.classList.remove('hidden');
                 return;
