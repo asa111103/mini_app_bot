@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Telegram Mini App - Личный кабинет</title>
-    <script src="https://telegram.org/js/telegram-web-app.js?new"></script>
+    <title>Telegram Mini App - Личный кабинет волонтера</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -33,29 +33,20 @@
             background-color: var(--tg-theme-secondary-bg-color, #f3f4f6);
             color: var(--tg-theme-text-color, #000000);
         }
-        .loader {
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #3498db;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            animation: spin 1s linear infinite;
-            display: inline-block;
+        .info-card {
+            background-color: var(--tg-theme-secondary-bg-color, #f3f4f6);
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
         }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        .forgot-password {
-            color: var(--tg-theme-link-color, #2481cc);
-            font-size: 0.875rem;
-            cursor: pointer;
-        }
-        .forgot-password:hover {
-            text-decoration: underline;
-        }
-        .hidden {
-            display: none !important;
+        .dobro-badge {
+            background-color: #f59e0b;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
         }
     </style>
 </head>
@@ -63,52 +54,58 @@
     <div class="w-full max-w-md">
         <!-- Регистрация -->
         <div id="register-section" class="rounded-lg card p-6 fade-in">
-            <h2 class="text-xl font-bold text-center mb-4">Создать аккаунт</h2>
+            <h2 class="text-xl font-bold text-center mb-4">Регистрация волонтера</h2>
             <form id="register-form" class="space-y-3">
                 <div>
-                    <label for="fio" class="block text-sm font-medium mb-1">ФИО волонтера</label>
+                    <label for="fio" class="block text-sm font-medium mb-1">ФИО волонтера *</label>
                     <input type="text" id="fio" required
                         class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none">
                 </div>
                 <div>
-                    <label for="dob" class="block text-sm font-medium mb-1">Дата рождения</label>
-                    <input type="date" id="dob" required
+                    <label for="dob" class="block text-sm font-medium mb-1">Дата рождения *</label>
+                    <input type="date" id="dob" required max=""
                         class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none">
                 </div>
                 <div>
-                    <label for="institute" class="block text-sm font-medium mb-1">Институт</label>
+                    <label for="institute" class="block text-sm font-medium mb-1">Институт *</label>
                     <input type="text" id="institute" required
                         class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none">
                 </div>
                 <div>
-                    <label for="group" class="block text-sm font-medium mb-1">Группа</label>
+                    <label for="group" class="block text-sm font-medium mb-1">Группа *</label>
                     <input type="text" id="group" required
                         class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none">
                 </div>
                 <div>
-                    <label for="phone" class="block text-sm font-medium mb-1">Телефон</label>
+                    <label for="phone" class="block text-sm font-medium mb-1">Телефон *</label>
                     <input type="tel" id="phone" required
-                        class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none">
+                        class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none"
+                        placeholder="+7 (XXX) XXX-XX-XX">
                 </div>
                 <div>
-                    <label for="vk" class="block text-sm font-medium mb-1">Ссылка VK</label>
+                    <label for="vk" class="block text-sm font-medium mb-1">Ссылка VK *</label>
                     <input type="url" id="vk" required
+                        class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none"
+                        placeholder="https://vk.com/username">
+                </div>
+                <div>
+                    <label for="dobro" class="block text-sm font-medium mb-1">Баллы Добро *</label>
+                    <input type="number" id="dobro" required min="0" value="0"
                         class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none">
                 </div>
                 <div>
-                    <label for="reg-password" class="block text-sm font-medium mb-1">Пароль</label>
+                    <label for="reg-password" class="block text-sm font-medium mb-1">Пароль *</label>
                     <input type="password" id="reg-password" required minlength="6"
                         class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none">
                 </div>
                 <div>
-                    <label for="reg-confirm" class="block text-sm font-medium mb-1">Подтвердите пароль</label>
+                    <label for="reg-confirm" class="block text-sm font-medium mb-1">Подтвердите пароль *</label>
                     <input type="password" id="reg-confirm" required minlength="6"
                         class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none">
                 </div>
                 <div id="register-error" class="text-red-500 text-sm hidden"></div>
-                <button type="submit" class="w-full btn-primary py-2 px-4 rounded-lg transition duration-200 flex items-center justify-center">
-                    <span id="register-btn-text">Зарегистрироваться</span>
-                    <div id="register-loader" class="loader ml-2 hidden"></div>
+                <button type="submit" class="w-full btn-primary py-2 px-4 rounded-lg transition duration-200">
+                    Зарегистрироваться
                 </button>
             </form>
             <div class="mt-3 text-center">
@@ -121,52 +118,22 @@
             <h2 class="text-xl font-bold text-center mb-4">Вход в аккаунт</h2>
             <form id="login-form" class="space-y-3">
                 <div>
-                    <label for="login-username" class="block text-sm font-medium mb-1">Имя пользователя</label>
+                    <label for="login-username" class="block text-sm font-medium mb-1">Имя пользователя *</label>
                     <input type="text" id="login-username" required
                         class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none">
                 </div>
                 <div>
-                    <label for="login-password" class="block text-sm font-medium mb-1">Пароль</label>
+                    <label for="login-password" class="block text-sm font-medium mb-1">Пароль *</label>
                     <input type="password" id="login-password" required minlength="6"
                         class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none">
-                    <div class="text-right mt-1">
-                        <span id="forgot-password" class="forgot-password">Забыли пароль?</span>
-                    </div>
                 </div>
                 <div id="login-error" class="text-red-500 text-sm hidden"></div>
-                <button type="submit" class="w-full btn-primary py-2 px-4 rounded-lg transition duration-200 flex items-center justify-center">
-                    <span id="login-btn-text">Войти</span>
-                    <div id="login-loader" class="loader ml-2 hidden"></div>
+                <button type="submit" class="w-full btn-primary py-2 px-4 rounded-lg transition duration-200">
+                    Войти
                 </button>
             </form>
             <div class="mt-3 text-center">
                 <p class="text-sm">Нет аккаунта? <button id="show-register" class="text-blue-500 hover:underline">Зарегистрироваться</button></p>
-            </div>
-        </div>
-
-        <!-- Восстановление пароля -->
-        <div id="recovery-section" class="rounded-lg card p-6 fade-in hidden">
-            <h2 class="text-xl font-bold text-center mb-4">Восстановление пароля</h2>
-            <form id="recovery-form" class="space-y-3">
-                <div>
-                    <label for="recovery-username" class="block text-sm font-medium mb-1">Имя пользователя</label>
-                    <input type="text" id="recovery-username" required
-                        class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none">
-                </div>
-                <div>
-                    <label for="recovery-phone" class="block text-sm font-medium mb-1">Телефон</label>
-                    <input type="tel" id="recovery-phone" required
-                        class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none">
-                </div>
-                <div id="recovery-error" class="text-red-500 text-sm hidden"></div>
-                <div id="recovery-success" class="text-green-500 text-sm hidden"></div>
-                <button type="submit" class="w-full btn-primary py-2 px-4 rounded-lg transition duration-200 flex items-center justify-center">
-                    <span id="recovery-btn-text">Восстановить пароль</span>
-                    <div id="recovery-loader" class="loader ml-2 hidden"></div>
-                </button>
-            </form>
-            <div class="mt-3 text-center">
-                <p class="text-sm">Вспомнили пароль? <button id="show-login-from-recovery" class="text-blue-500 hover:underline">Войти</button></p>
             </div>
         </div>
 
@@ -178,6 +145,7 @@
                     <i class="fas fa-sign-out-alt"></i>
                 </button>
             </div>
+
             <div class="space-y-3">
                 <div class="flex items-center">
                     <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mr-3">
@@ -188,74 +156,48 @@
                         <p id="user-username" class="text-sm opacity-80"></p>
                     </div>
                 </div>
-                <div class="mt-4 pt-4 border-t border-gray-200">
-                    <h3 class="font-medium mb-2">Информация о профиле</h3>
-                    <div class="grid grid-cols-2 gap-3">
+
+                <div class="mt-4 space-y-2">
+                    <div class="info-card flex justify-between items-center">
                         <div>
-                            <p class="text-xs opacity-70">Дата рождения</p>
-                            <p id="user-dob" class="font-medium text-sm"></p>
+                            <p class="text-xs opacity-70">ID Добро</p>
+                            <p id="user-id-dobro" class="font-medium text-sm"></p>
                         </div>
                         <div>
-                            <p class="text-xs opacity-70">Институт</p>
-                            <p id="user-institute" class="font-medium text-sm"></p>
-                        </div>
-                        <div>
-                            <p class="text-xs opacity-70">Группа</p>
-                            <p id="user-group" class="font-medium text-sm"></p>
-                        </div>
-                        <div>
-                            <p class="text-xs opacity-70">Телефон</p>
-                            <p id="user-phone" class="font-medium text-sm"></p>
-                        </div>
-                        <div>
-                            <p class="text-xs opacity-70">Ссылка VK</p>
-                            <p id="user-vk" class="font-medium text-sm"></p>
-                        </div>
-                        <div>
-                            <p class="text-xs opacity-70">Дата регистрации</p>
-                            <p id="reg-date" class="font-medium text-sm"></p>
+                            <p class="text-xs opacity-70">Баллы</p>
+                            <div id="user-dobro" class="dobro-badge text-sm">
+                                <i class="fas fa-star mr-1"></i>
+                                <span>0</span>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="mt-4 pt-4 border-t border-gray-200">
-                    <button id="change-password-btn" class="w-full py-2 px-4 rounded-lg border border-gray-300 hover:bg-gray-50 transition duration-200">
-                        Изменить пароль
-                    </button>
+                    
+                    <div class="info-card">
+                        <p class="text-xs opacity-70">Дата рождения</p>
+                        <p id="user-dob" class="font-medium text-sm"></p>
+                    </div>
+                    <div class="info-card">
+                        <p class="text-xs opacity-70">Институт</p>
+                        <p id="user-institute" class="font-medium text-sm"></p>
+                    </div>
+                    <div class="info-card">
+                        <p class="text-xs opacity-70">Группа</p>
+                        <p id="user-group" class="font-medium text-sm"></p>
+                    </div>
+                    <div class="info-card">
+                        <p class="text-xs opacity-70">Телефон</p>
+                        <p id="user-phone" class="font-medium text-sm"></p>
+                    </div>
+                    <div class="info-card">
+                        <p class="text-xs opacity-70">Ссылка VK</p>
+                        <p id="user-vk" class="font-medium text-sm"></p>
+                    </div>
+                    <div class="info-card">
+                        <p class="text-xs opacity-70">Дата регистрации</p>
+                        <p id="reg-date" class="font-medium text-sm"></p>
+                    </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Изменение пароля -->
-        <div id="change-password-section" class="rounded-lg card p-6 fade-in hidden">
-            <h2 class="text-xl font-bold text-center mb-4">Изменение пароля</h2>
-            <form id="change-password-form" class="space-y-3">
-                <div>
-                    <label for="current-password" class="block text-sm font-medium mb-1">Текущий пароль</label>
-                    <input type="password" id="current-password" required minlength="6"
-                        class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none">
-                </div>
-                <div>
-                    <label for="new-password" class="block text-sm font-medium mb-1">Новый пароль</label>
-                    <input type="password" id="new-password" required minlength="6"
-                        class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none">
-                </div>
-                <div>
-                    <label for="confirm-new-password" class="block text-sm font-medium mb-1">Подтвердите новый пароль</label>
-                    <input type="password" id="confirm-new-password" required minlength="6"
-                        class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none">
-                </div>
-                <div id="change-password-error" class="text-red-500 text-sm hidden"></div>
-                <div id="change-password-success" class="text-green-500 text-sm hidden"></div>
-                <div class="flex space-x-3">
-                    <button type="button" id="cancel-change-password" class="w-1/2 py-2 px-4 rounded-lg border border-gray-300 hover:bg-gray-50 transition duration-200">
-                        Отмена
-                    </button>
-                    <button type="submit" class="w-1/2 btn-primary py-2 px-4 rounded-lg transition duration-200 flex items-center justify-center">
-                        <span id="change-password-btn-text">Изменить</span>
-                        <div id="change-password-loader" class="loader ml-2 hidden"></div>
-                    </button>
-                </div>
-            </form>
         </div>
 
         <!-- Кнопка для тестирования вне Telegram -->
@@ -266,17 +208,15 @@
             </a>
         </div>
     </div>
-
     <script>
         // Проверяем, запущено ли приложение в Telegram WebApp
         const isTelegram = window.Telegram && window.Telegram.WebApp;
-        console.log('WebApp initData:', Telegram.WebApp.initData);
-        console.log('WebApp version:', Telegram.WebApp.version);
-        // Проверка методов
-        console.log('sendData available:', typeof Telegram.WebApp.sendData === 'function');
-        
+
         // Инициализация при загрузке
         document.addEventListener('DOMContentLoaded', function() {
+            // Установка максимальной даты рождения (сегодня)
+            document.getElementById('dob').max = new Date().toISOString().split('T')[0];
+            
             // Показываем кнопку "Открыть в Telegram", если не в Telegram
             if (!isTelegram) {
                 document.getElementById('telegram-btn').classList.remove('hidden');
@@ -284,258 +224,265 @@
                 // Инициализируем Telegram WebApp
                 Telegram.WebApp.ready();
                 Telegram.WebApp.expand();
-                
-                // Можно использовать данные пользователя Telegram
+
+                // Используем данные пользователя Telegram
                 const tgUser = Telegram.WebApp.initDataUnsafe.user;
                 if (tgUser) {
                     document.getElementById('login-username').value = tgUser.username || '';
+                    
+                    // Автозаполнение имени из Telegram
+                    const nameInput = document.getElementById('fio');
+                    if (tgUser.first_name) {
+                        nameInput.value = tgUser.first_name;
+                        if (tgUser.last_name) {
+                            nameInput.value += ' ' + tgUser.last_name;
+                        }
+                    }
                 }
-                
-                // Проверяем, авторизован ли пользователь
-                checkAuthStatus();
             }
-            
+
+            // Проверяем, авторизован ли пользователь
+            const currentUser = localStorage.getItem('currentUser');
+            if (currentUser) {
+                showDashboard(JSON.parse(currentUser));
+            } else {
+                document.getElementById('register-section').classList.remove('hidden');
+            }
+
             // Обработчики событий
             document.getElementById('show-login').addEventListener('click', showLogin);
             document.getElementById('show-register').addEventListener('click', showRegister);
             document.getElementById('logout-btn').addEventListener('click', logout);
-            document.getElementById('forgot-password').addEventListener('click', showRecovery);
-            document.getElementById('show-login-from-recovery').addEventListener('click', showLogin);
-            document.getElementById('change-password-btn').addEventListener('click', showChangePassword);
-            document.getElementById('cancel-change-password').addEventListener('click', cancelChangePassword);
-            
+
             // Обработчики форм
             document.getElementById('register-form').addEventListener('submit', registerUser);
             document.getElementById('login-form').addEventListener('submit', loginUser);
-            document.getElementById('recovery-form').addEventListener('submit', recoverPassword);
-            document.getElementById('change-password-form').addEventListener('submit', changePassword);
+            
+            // Маска для телефона
+            const phoneInput = document.getElementById('phone');
+            phoneInput.addEventListener('input', function(e) {
+                const x = e.target.value.replace(/\D/g, '').match(/(\d{0,1})(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/);
+                e.target.value = !x[2] ? x[1] : '+7 (' + x[2] + (x[3] ? ') ' + x[3] : '') + (x[4] ? '-' + x[4] : '') + (x[5] ? '-' + x[5] : '');
+            });
         });
-
-        // Проверить статус авторизации
-        function checkAuthStatus() {
-            if (!isTelegram) return;
-            
-            showLoader('login');
-            
-            // Отправляем запрос на проверку авторизации
-            Telegram.WebApp.sendData(JSON.stringify({
-                action: 'check_auth',
-                user: {
-                    username: document.getElementById('login-username').value
-                }
-            }));
-        }
 
         // Показать форму входа
         function showLogin() {
             document.getElementById('register-section').classList.add('hidden');
             document.getElementById('login-section').classList.remove('hidden');
-            document.getElementById('recovery-section').classList.add('hidden');
             document.getElementById('dashboard-section').classList.add('hidden');
-            document.getElementById('change-password-section').classList.add('hidden');
-            
-            // Очищаем сообщения об ошибках
-            document.getElementById('login-error').classList.add('hidden');
         }
 
         // Показать форму регистрации
         function showRegister() {
             document.getElementById('login-section').classList.add('hidden');
             document.getElementById('register-section').classList.remove('hidden');
-            document.getElementById('recovery-section').classList.add('hidden');
-            document.getElementById('dashboard-section').classList.add
-                        document.getElementById('dashboard-section').classList.add('hidden');
-            document.getElementById('change-password-section').classList.add('hidden');
-            
-            // Очищаем сообщения об ошибках
-            document.getElementById('register-error').classList.add('hidden');
-        }
-
-        // Показать форму восстановления пароля
-        function showRecovery() {
-            document.getElementById('login-section').classList.add('hidden');
-            document.getElementById('register-section').classList.add('hidden');
-            document.getElementById('recovery-section').classList.remove('hidden');
             document.getElementById('dashboard-section').classList.add('hidden');
-            document.getElementById('change-password-section').classList.add('hidden');
-            
-            // Очищаем сообщения
-            document.getElementById('recovery-error').classList.add('hidden');
-            document.getElementById('recovery-success').classList.add('hidden');
         }
 
-        // Показать личный кабинет с данными пользователя
+        // Показать личный кабинет
         function showDashboard(user) {
             document.getElementById('register-section').classList.add('hidden');
             document.getElementById('login-section').classList.add('hidden');
-            document.getElementById('recovery-section').classList.add('hidden');
             document.getElementById('dashboard-section').classList.remove('hidden');
-            document.getElementById('change-password-section').classList.add('hidden');
-            
+
             // Заполняем данные пользователя
             document.getElementById('user-fio').textContent = user.ФИО_волонтера;
             document.getElementById('user-username').textContent = user.Имя_пользователя;
-            document.getElementById('user-dob').textContent = user.Дата_рождения;
+            document.getElementById('user-id-dobro').textContent = user.ID_Добро || '—';
+            document.getElementById('user-dob').textContent = formatDate(user.Дата_рождения);
             document.getElementById('user-institute').textContent = user.Институт;
             document.getElementById('user-group').textContent = user.Группа;
             document.getElementById('user-phone').textContent = user.Телефон;
             document.getElementById('user-vk').textContent = user.Ссылка_VK;
-            
-            // Форматируем дату регистрации
-            const regDate = new Date(user.Дата_Регистрации);
-            const options = { year: 'numeric', month: 'long', day: 'numeric' };
-            document.getElementById('reg-date').textContent = regDate.toLocaleDateString('ru-RU', options);
+            document.getElementById('user-dobro').querySelector('span').textContent = user.Добро || '0';
+            document.getElementById('reg-date').textContent = formatDate(user.Дата_Регистрации?.split(' ')[0] || new Date().toISOString());
+
+            // Сохраняем обновленные данные
+            localStorage.setItem('currentUser', JSON.stringify(user));
         }
 
-        // Показать форму изменения пароля
-        function showChangePassword() {
-            document.getElementById('change-password-section').classList.remove('hidden');
-            document.getElementById('dashboard-section').classList.add('hidden');
+        // Форматирование даты в DD.MM.YYYY
+        function formatDate(dateStr) {
+            if (!dateStr) return '—';
             
-            // Очищаем сообщения
-            document.getElementById('change-password-error').classList.add('hidden');
-            document.getElementById('change-password-success').classList.add('hidden');
-        }
-
-        // Отмена изменения пароля
-        function cancelChangePassword() {
-            document.getElementById('change-password-section').classList.add('hidden');
-            document.getElementById('dashboard-section').classList.remove('hidden');
-            
-            // Очищаем поля формы
-            document.getElementById('current-password').value = '';
-            document.getElementById('new-password').value = '';
-            document.getElementById('confirm-new-password').value = '';
+            try {
+                // Пытаемся разобрать дату в формате YYYY-MM-DD
+                const parts = dateStr.split('-');
+                if (parts.length === 3) {
+                    return `${parts[2]}.${parts[1]}.${parts[0]}`;
+                }
+                
+                // Пытаемся разобрать дату в формате YYYY-MM-DD HH:MM:SS
+                const datePart = dateStr.split(' ')[0];
+                const dateParts = datePart.split('-');
+                if (dateParts.length === 3) {
+                    return `${dateParts[2]}.${dateParts[1]}.${dateParts[0]}`;
+                }
+                
+                return dateStr;
+            } catch (e) {
+                return dateStr;
+            }
         }
 
         // Регистрация нового пользователя
         function registerUser(e) {
             e.preventDefault();
-            
+
             const fio = document.getElementById('fio').value.trim();
-            const dob = document.getElementById('dob').value.trim();
+            const dob = document.getElementById('dob').value;
             const institute = document.getElementById('institute').value.trim();
             const group = document.getElementById('group').value.trim();
             const phone = document.getElementById('phone').value.trim();
             const vk = document.getElementById('vk').value.trim();
+            const dobro = document.getElementById('dobro').value;
             const password = document.getElementById('reg-password').value;
             const confirmPassword = document.getElementById('reg-confirm').value;
-            
+            const username = isTelegram ? Telegram.WebApp.initDataUnsafe.user.username : 'user_' + Math.random().toString(36).substr(2, 5);
+
             // Валидация
             const errorElement = document.getElementById('register-error');
+            errorElement.classList.add('hidden');
+
+            if (!fio) {
+                errorElement.textContent = 'Укажите ФИО волонтера';
+                errorElement.classList.remove('hidden');
+                return;
+            }
+
+            if (!dob) {
+                errorElement.textContent = 'Укажите дату рождения';
+                errorElement.classList.remove('hidden');
+                return;
+            }
+
+            if (!institute) {
+                errorElement.textContent = 'Укажите институт';
+                errorElement.classList.remove('hidden');
+                return;
+            }
+
+            if (!group) {
+                errorElement.textContent = 'Укажите группу';
+                errorElement.classList.remove('hidden');
+                return;
+            }
+
+                        if (!phone || phone.length < 5) {
+                errorElement.textContent = 'Укажите корректный номер телефона';
+                errorElement.classList.remove('hidden');
+                return;
+            }
+
+            if (!vk || !vk.startsWith('https://vk.com/')) {
+                errorElement.textContent = 'Укажите корректную ссылку VK (начинается с https://vk.com/)';
+                errorElement.classList.remove('hidden');
+                return;
+            }
+
             if (password !== confirmPassword) {
                 errorElement.textContent = 'Пароли не совпадают';
                 errorElement.classList.remove('hidden');
                 return;
             }
+
             if (password.length < 6) {
                 errorElement.textContent = 'Пароль должен содержать минимум 6 символов';
                 errorElement.classList.remove('hidden');
                 return;
             }
-            
-            showLoader('register');
-            
-            // Создаем объект с данными пользователя
-            const userData = {
-                action: 'register',
-                user: {
-                    ФИО_волонтера: fio,
-                    Дата_рождения: dob,
-                    Институт: institute,
-                    Группа: group,
-                    Телефон: phone,
-                    Ссылка_VK: vk,
-                    Пароль: password
-                }
+
+            // Создаем нового пользователя
+            const newUser = {
+                user_id: isTelegram ? Telegram.WebApp.initDataUnsafe.user.id : Date.now(),
+                ID_Добро: 0, // Будет установлено сервером
+                Имя_пользователя: username,
+                ФИО_волонтера: fio,
+                Дата_рождения: dob,
+                Институт: institute,
+                Группа: group,
+                Телефон: phone,
+                Ссылка_VK: vk,
+                Добро: parseInt(dobro) || 0,
+                Пароль: btoa(password),
+                Дата_Регистрации: new Date().toISOString()
             };
-            
-            // Отправляем данные в бота через Telegram WebApp
-            Telegram.WebApp.sendData(JSON.stringify(userData));
+
+            // Отправляем данные в бота
+            if (isTelegram) {
+                Telegram.WebApp.sendData(JSON.stringify({
+                    action: 'register',
+                    user: newUser
+                }));
+            } else {
+                // Для тестирования вне Telegram
+                // Генерируем случайный ID Добро
+                newUser.ID_Добро = Math.floor(1000 + Math.random() * 9000);
+                
+                // Сохраняем пользователя в localStorage
+                const users = JSON.parse(localStorage.getItem('users') || '{}');
+                users[username] = newUser;
+                localStorage.setItem('users', JSON.stringify(users));
+                localStorage.setItem('currentUser', JSON.stringify(newUser));
+                
+                showDashboard(newUser);
+            }
         }
 
         // Вход пользователя
         function loginUser(e) {
             e.preventDefault();
-            
+
             const username = document.getElementById('login-username').value.trim();
             const password = document.getElementById('login-password').value;
-            
-            showLoader('login');
-            
-            // Создаем объект с данными для входа
-            const loginData = {
-                action: 'login',
-                user: {
-                    Имя_пользователя: username,
-                    Пароль: password
-                }
-            };
-            
-            // Отправляем данные в бота через Telegram WebApp
-            Telegram.WebApp.sendData(JSON.stringify(loginData));
-        }
 
-        // Восстановление пароля
-        function recoverPassword(e) {
-            e.preventDefault();
-            
-            const username = document.getElementById('recovery-username').value.trim();
-            const phone = document.getElementById('recovery-phone').value.trim();
-            
-            showLoader('recovery');
-            
-            // Создаем объект с данными для восстановления
-            const recoveryData = {
-                action: 'recover_password',
-                user: {
-                    Имя_пользователя: username,
-                    Телефон: phone
-                }
-            };
-            
-            // Отправляем данные в бота через Telegram WebApp
-            Telegram.WebApp.sendData(JSON.stringify(recoveryData));
-        }
-
-        // Изменение пароля
-        function changePassword(e) {
-            e.preventDefault();
-            
-            const currentPassword = document.getElementById('current-password').value;
-            const newPassword = document.getElementById('new-password').value;
-            const confirmNewPassword = document.getElementById('confirm-new-password').value;
-            
             // Валидация
-            const errorElement = document.getElementById('change-password-error');
-            if (newPassword !== confirmNewPassword) {
-                errorElement.textContent = 'Новые пароли не совпадают';
+            const errorElement = document.getElementById('login-error');
+            errorElement.classList.add('hidden');
+
+            if (!username) {
+                errorElement.textContent = 'Введите имя пользователя';
                 errorElement.classList.remove('hidden');
                 return;
             }
-            if (newPassword.length < 6) {
+
+            if (password.length < 6) {
                 errorElement.textContent = 'Пароль должен содержать минимум 6 символов';
                 errorElement.classList.remove('hidden');
                 return;
             }
-            
-            showLoader('change-password');
-            
-            // Создаем объект с данными для изменения пароля
-            const changePasswordData = {
-                action: 'change_password',
-                user: {
-                    current_password: currentPassword,
-                    new_password: newPassword
+
+            // Отправляем данные в бота
+            if (isTelegram) {
+                Telegram.WebApp.sendData(JSON.stringify({
+                    action: 'login',
+                    user: {
+                        Имя_пользователя: username,
+                        Пароль: btoa(password)
+                    }
+                }));
+            } else {
+                // Для тестирования вне Telegram
+                const users = JSON.parse(localStorage.getItem('users') || '{}');
+                const user = users[username];
+                
+                if (user && btoa(password) === user.Пароль) {
+                    showDashboard(user);
+                } else {
+                    errorElement.textContent = 'Неверное имя пользователя или пароль';
+                    errorElement.classList.remove('hidden');
                 }
-            };
-            
-            // Отправляем данные в бота через Telegram WebApp
-            Telegram.WebApp.sendData(JSON.stringify(changePasswordData));
+            }
         }
 
         // Выход из системы
         function logout() {
+            localStorage.removeItem('currentUser');
+            document.getElementById('login-username').value = '';
+            document.getElementById('login-password').value = '';
+            document.getElementById('login-error').classList.add('hidden');
+
             if (isTelegram) {
                 Telegram.WebApp.close();
             } else {
@@ -543,95 +490,16 @@
             }
         }
 
-        // Показать индикатор загрузки
-        function showLoader(type) {
-            const types = {
-                'register': ['register-btn-text', 'register-loader'],
-                'login': ['login-btn-text', 'login-loader'],
-                'recovery': ['recovery-btn-text', 'recovery-loader'],
-                'change-password': ['change-password-btn-text', 'change-password-loader']
-            };
-            
-            if (types[type]) {
-                document.getElementById(types[type][0]).classList.add('hidden');
-                document.getElementById(types[type][1]).classList.remove('hidden');
-            }
+        // Обработка ответа от бота
+        if (isTelegram) {
+            Telegram.WebApp.onEvent('mainButtonClicked', function() {
+                Telegram.WebApp.sendData(JSON.stringify({
+                    action: 'get_user_data'
+                }));
+            });
         }
-
-        // Скрыть индикатор загрузки
-        function hideLoader(type) {
-            const types = {
-                'register': ['register-btn-text', 'register-loader'],
-                'login': ['login-btn-text', 'login-loader'],
-                'recovery': ['recovery-btn-text', 'recovery-loader'],
-                'change-password': ['change-password-btn-text', 'change-password-loader']
-            };
-            
-            if (types[type]) {
-                document.getElementById(types[type][0]).classList.remove('hidden');
-                document.getElementById(types[type][1]).classList.add('hidden');
-            }
-        }
-
-        // Обработчик событий от Telegram WebApp
-        Telegram.WebApp.onEvent('webAppDataReceived', function(event) {
-            try {
-                const data = JSON.parse(event);
-                
-                if (data.success) {
-                    if (data.action === 'register' || data.action === 'login') {
-                        showDashboard(data.user);
-                    } else if (data.action === 'recover_password') {
-                        // Показываем сообщение об успешном восстановлении
-                        document.getElementById('recovery-error').classList.add('hidden');
-                        const successElement = document.getElementById('recovery-success');
-                        successElement.textContent = 'Новый пароль был отправлен на ваш телефон';
-                        successElement.classList.remove('hidden');
-                        hideLoader('recovery');
-                        
-                        // Очищаем поля формы
-                        document.getElementById('recovery-username').value = '';
-                        document.getElementById('recovery-phone').value = '';
-                    } else if (data.action === 'change_password') {
-                        // Показываем сообщение об успешном изменении пароля
-                        document.getElementById('change-password-error').classList.add('hidden');
-                        const successElement = document.getElementById('change-password-success');
-                        successElement.textContent = 'Пароль успешно изменен';
-                        successElement.classList.remove('hidden');
-                        hideLoader('change-password');
-                        
-                        // Очищаем поля формы
-                        document.getElementById('current-password').value = '';
-                        document.getElementById('new-password').value = '';
-                        document.getElementById('confirm-new-password').value = '';
-                        
-                        // Возвращаемся в личный кабинет через 2 секунды
-                        setTimeout(() => {
-                            document.getElementById('change-password-section').classList.add('hidden');
-                            document.getElementById('dashboard-section').classList.remove('hidden');
-                            document.getElementById('change-password-success').classList.add('hidden');
-                        }, 2000);
-                    }
-                } else {
-                    const errorElement = 
-                        data.action === 'register' ? document.getElementById('register-error') :
-                        data.action === 'login' ? document.getElementById('login-error') :
-                        data.action === 'recover_password' ? document.getElementById('recovery-error') :
-                        document.getElementById('change-password-error');
-                    
-                    errorElement.textContent = data.message;
-                    errorElement.classList.remove('hidden');
-                    
-                    hideLoader(data.action);
-                }
-            } catch (e) {
-                console.error('Error parsing response:', e);
-                hideLoader('register');
-                hideLoader('login');
-                hideLoader('recovery');
-                hideLoader('change-password');
-            }
-        });
     </script>
 </body>
 </html>
+
+                
