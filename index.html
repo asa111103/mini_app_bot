@@ -181,6 +181,7 @@
 <script>
         // Проверяем, запущено ли приложение в Telegram WebApp
         const isTelegram = window.Telegram && window.Telegram.WebApp;
+        localStorage.clear()
         // Инициализация при загрузке
         document.addEventListener('DOMContentLoaded', function() {
             // Показываем кнопку "Открыть в Telegram", если не в Telegram
