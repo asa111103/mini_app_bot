@@ -232,7 +232,7 @@
             document.getElementById('user-fio').textContent = user.FIO_волонтера;
             document.getElementById('user-username').textContent = user.Имя_пользователя;
             const options = { year: 'numeric', month: 'long', day: 'numeric' };
-            document.getElementById('user-dob').textContent = user.Дата_рождения.toLocaleDateString('ru-RU', options);
+            document.getElementById('user-dob').textContent = user.Дата_рождения);
             document.getElementById('user-institute').textContent = user.Институт;
             document.getElementById('user-group').textContent = user.Группа;
             document.getElementById('user-phone').textContent = user.Телефон;
@@ -259,6 +259,41 @@
             const confirmPassword = document.getElementById('reg-confirm').value;
             // Валидация
             const errorElement = document.getElementById('register-error');
+            if (!fio) {
+                errorElement.textContent = 'Укажите ФИО волонтера';
+                errorElement.classList.remove('hidden');
+                return;
+            }
+
+            if (!dob) {
+                errorElement.textContent = 'Укажите дату рождения';
+                errorElement.classList.remove('hidden');
+                return;
+            }
+
+            if (!institute) {
+                errorElement.textContent = 'Укажите институт';
+                errorElement.classList.remove('hidden');
+                return;
+            }
+
+            if (!group) {
+                errorElement.textContent = 'Укажите группу';
+                errorElement.classList.remove('hidden');
+                return;
+            }
+
+            if (!phone || phone.length < 5) {
+                errorElement.textContent = 'Укажите корректный номер телефона';
+                errorElement.classList.remove('hidden');
+                return;
+            }
+
+            if (!vk || !vk.startsWith('https://vk.com/')) {
+                errorElement.textContent = 'Укажите корректную ссылку VK (начинается с https://vk.com/)';
+                errorElement.classList.remove('hidden');
+                return;
+            }
             if (password !== confirmPassword) {
                 errorElement.textContent = 'Пароли не совпадают';
                 errorElement.classList.remove('hidden');
