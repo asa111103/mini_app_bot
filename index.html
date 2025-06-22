@@ -314,7 +314,7 @@
             showLoader('login');
             
             // Отправляем запрос на проверку авторизации
-            Telegram.WebApp.sendData(JSON.stringify({
+            Telegram.WebApp.answerWebAppQuery(JSON.stringify({
                 action: 'check_auth',
                 user: {
                     username: document.getElementById('login-username').value
@@ -405,25 +405,25 @@
         }
 
         // Регистрация нового пользователя
-        async function registerUser(e) {
+        function registerUser(e) {
             e.preventDefault();
             
-            // Собираем данные
-            const formData = {
-                ФИО_волонтера: document.getElementById('fio').value.trim(),
-                Дата_рождения: document.getElementById('dob').value.trim(),
-                Институт: document.getElementById('institute').value.trim(),
-                Группа: document.getElementById('group').value.trim(),
-                Телефон: document.getElementById('phone').value.trim(),
-                Ссылка_VK: document.getElementById('vk').value.trim(),
-                Пароль: document.getElementById('reg-password').value
-            };
+            const fio = document.getElementById('fio').value.trim();
+            const dob = document.getElementById('dob').value.trim();
+            const institute = document.getElementById('institute').value.trim();
+            const group = document.getElementById('group').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const vk = document.getElementById('vk').value.trim();
+            const password = document.getElementById('reg-password').value;
+            const confirmPassword = document.getElementById('reg-confirm').value;
+            
             // Валидация
-            if (formData.Пароль !== document.getElementById('reg-confirm').value) {
-                showError('register-error', 'Пароли не совпадают');
+            const errorElement = document.getElementById('register-error');
+            if (password !== confirmPassword) {
+                errorElement.textContent = 'Пароли не совпадают';
+                errorElement.classList.remove('hidden');
                 return;
             }
-  
             if (password.length < 6) {
                 errorElement.textContent = 'Пароль должен содержать минимум 6 символов';
                 errorElement.classList.remove('hidden');
@@ -432,34 +432,24 @@
             
             showLoader('register');
             
-            // Таймаут для обработки отсутствия ответа
-            const timeout = setTimeout(() => {
-                hideLoader('register');
-                showError('register-error', 'Сервер не отвечает. Попробуйте позже.');
-            }, 10000);
-            // Отправка данных
-            try {
-                const response = await Telegram.WebApp.sendData(JSON.stringify({
-                    action: 'register',
-                    user: formData
-                }));
-                
-                console.log("Данные отправлены, ожидаем ответа...");
-                
-                // Ответ будет обработан в webAppDataReceived
-            } catch (error) {
-                clearTimeout(timeout);
-                hideLoader('register');
-                showError('register-error', 'Ошибка отправки данных');
-                console.error("Ошибка:", error);
-            }
+            // Создаем объект с данными пользователя
+            const userData = {
+                action: 'register',
+                user: {
+                    ФИО_волонтера: fio,
+                    Дата_рождения: dob,
+                    Институт: institute,
+                    Группа: group,
+                    Телефон: phone,
+                    Ссылка_VK: vk,
+                    Пароль: password
+                }
+            };
+            
+            // Отправляем данные в бота через Telegram WebApp
+            Telegram.WebApp.answerWebAppQuery(JSON.stringify(userData));
         }
-        function showError(elementId, message) {
-            const element = document.getElementById(elementId);
-            element.textContent = message;
-            element.classList.remove('hidden');
-        }
-        
+
         // Вход пользователя
         function loginUser(e) {
             e.preventDefault();
@@ -479,7 +469,7 @@
             };
             
             // Отправляем данные в бота через Telegram WebApp
-            Telegram.WebApp.sendData(JSON.stringify(loginData));
+            Telegram.WebApp.answerWebAppQuery(JSON.stringify(loginData));
         }
 
         // Восстановление пароля
@@ -501,7 +491,7 @@
             };
             
             // Отправляем данные в бота через Telegram WebApp
-            Telegram.WebApp.sendData(JSON.stringify(recoveryData));
+            Telegram.WebApp.answerWebAppQuery(JSON.stringify(recoveryData));
         }
 
         // Изменение пароля
@@ -537,7 +527,7 @@
             };
             
             // Отправляем данные в бота через Telegram WebApp
-            Telegram.WebApp.sendData(JSON.stringify(changePasswordData));
+            Telegram.WebApp.answerWebAppQuery(JSON.stringify(changePasswordData));
         }
 
         // Выход из системы
