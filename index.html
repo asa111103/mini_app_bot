@@ -72,6 +72,11 @@
                         class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none">
                 </div>
                 <div>
+                    <label for="dobro" class="block text-sm font-medium mb-1">Ссылка VK</label>
+                    <input type="text" id="dobro" required
+                        class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none">
+                </div>
+                <div>
                     <label for="reg-password" class="block text-sm font-medium mb-1">Пароль</label>
                     <input type="password" id="reg-password" required minlength="6"
                         class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none">
@@ -129,6 +134,7 @@
                     <div>
                         <h3 id="user-fio" class="font-semibold"></h3>
                         <p id="user-username" class="text-sm opacity-80"></p>
+                        <p id="user-dobro" class="text-sm opacity-80"></p>
                     </div>
                 </div>
                 <div class="mt-4 pt-4 border-t border-gray-200">
@@ -223,6 +229,9 @@
             // Заполняем данные пользователя
             document.getElementById('user-fio').textContent = user.FIO_волонтера;
             document.getElementById('user-username').textContent = user.Имя_пользователя;
+            document.getElementById('user-dobro').textContent = user.Добро;
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('user-dob').textContent = user.Дата_рождения.toLocaleDateString('ru-RU', options);
             document.getElementById('user-dob').textContent = user.Дата_рождения;
             document.getElementById('user-institute').textContent = user.Институт;
             document.getElementById('user-group').textContent = user.Группа;
@@ -230,7 +239,6 @@
             document.getElementById('user-vk').textContent = user.Ссылка_VK;
             // Форматируем дату регистрации
             const regDate = new Date(user.Дата_Регистрации);
-            const options = { year: 'numeric', month: 'long', day: 'numeric' };
             document.getElementById('reg-date').textContent = regDate.toLocaleDateString('ru-RU', options);
             // Сохраняем обновленные данные
             const users = JSON.parse(localStorage.getItem('users') || '{}');
@@ -242,6 +250,7 @@
         function registerUser (e) {
             e.preventDefault();
             const fio = document.getElementById('fio').value.trim();
+            const fio = document.getElementById('dobro').value.trim();
             const dob = document.getElementById('dob').value.trim();
             const institute = document.getElementById('institute').value.trim();
             const group = document.getElementById('group').value.trim();
@@ -278,6 +287,7 @@
                 Группа: group,
                 Телефон: phone,
                 Ссылка_VK: vk,
+                Добро: dobro,
                 Пароль: btoa(password), // Базовое "шифрование"
                 Дата_Регистрации: new Date().toISOString()
             };
