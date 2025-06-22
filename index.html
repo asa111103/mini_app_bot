@@ -75,7 +75,7 @@
                 </div>
                 <div>
                     <label for="dobro" class="block text-sm font-medium mb-1">ID на Добро.рф</label>
-                    <input type="text" id="group" required
+                    <input type="text" id="dobro" required
                         class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none">
                 </div>
                 <div>
@@ -242,7 +242,7 @@
             document.getElementById('user-group').textContent = user.Группа;
             document.getElementById('user-phone').textContent = user.Телефон;
             document.getElementById('user-vk').textContent = user.Ссылка_VK;
-            document.getElementById('user-dobro').textContent = user.Ссылка_VK;
+            document.getElementById('user-dobro').textContent = user.Добро;
             // Форматируем дату регистрации
             const options = { year: 'numeric', month: 'long', day: 'numeric' };
             const regDate = new Date(user.Дата_Регистрации);
