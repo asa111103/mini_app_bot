@@ -54,27 +54,28 @@
                 <div>
                     <label for="institute" class="block text-sm font-medium mb-1">Институт</label>
                     <input type="text" id="institute" required
-                        class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none"
-                        placeholder="+7 (XXX) XXX-XX-XX">
+                        class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none">
                 </div>
                 <div>
                     <label for="group" class="block text-sm font-medium mb-1">Группа</label>
                     <input type="text" id="group" required
-                        class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none"
-                        placeholder="https://vk.com/username">
+                        class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none">
+                        
                 </div>
                 <div>
                     <label for="phone" class="block text-sm font-medium mb-1">Телефон</label>
                     <input type="tel" id="phone" required
-                        class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none">
+                        class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none"
+                        placeholder="+7 (XXX) XXX-XX-XX">
                 </div>
                 <div>
                     <label for="vk" class="block text-sm font-medium mb-1">Ссылка VK</label>
                     <input type="url" id="vk" required
-                        class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none">
+                        class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none"
+                        placeholder="https://vk.com/username">
                 </div>
                 <div>
-                    <label for="dobro" class="block text-sm font-medium mb-1">Баллы Добро *</label>
+                    <label for="dobro" class="block text-sm font-medium mb-1">Id на Добро.рф *</label>
                     <input type="text" id="dobro" required
                         class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none">
                 </div>
@@ -251,7 +252,7 @@
             document.getElementById('user-group').textContent = user.Группа;
             document.getElementById('user-phone').textContent = user.Телефон;
             document.getElementById('user-vk').textContent = user.Ссылка_VK;
-            document.getElementById('user-dobro').textContent = user.Ссылка_VK;
+            document.getElementById('user-dobro').textContent = user.Добро;
             // Форматируем дату регистрации
             const regDate = new Date(user.Дата_Регистрации);
             document.getElementById('reg-date').textContent = regDate.toLocaleDateString('ru-RU', options);
@@ -300,7 +301,7 @@
                 return;
             }
 
-                        if (!phone || phone.length < 11) {
+             if (!phone || phone.length < 11) {
                 errorElement.textContent = 'Укажите корректный номер телефона';
                 errorElement.classList.remove('hidden');
                 return;
@@ -339,7 +340,7 @@
                 Группа: group,
                 Телефон: phone,
                 Ссылка_VK: vk,
-                Добро: dobro;
+                Добро: dobro,
                 Пароль: btoa(password), // Базовое "шифрование"
                 Дата_Регистрации: new Date().toISOString()
             };
