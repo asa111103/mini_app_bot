@@ -263,7 +263,7 @@
             }
             // Проверяем, есть ли уже пользователь с таким именем пользователя
             const users = JSON.parse(localStorage.getItem('users') || '{}');
-            const username = document.getElementById('login-username').value.trim();
+            const username = document.getElementById('user-phone').value.trim();
             if (users[username]) {
                 errorElement.textContent = 'Пользователь с таким именем уже существует';
                 errorElement.classList.remove('hidden');
