@@ -25,6 +25,14 @@
         .btn-primary:hover {
             opacity: 0.9;
         }
+        .forgot-password {
+            color: var(--tg-theme-link-color, #2481cc);
+            font-size: 0.875rem;
+            cursor: pointer;
+        }
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
         body {
             background-color: var(--tg-theme-bg-color, #ffffff);
             color: var(--tg-theme-text-color, #000000);
@@ -103,6 +111,9 @@
                     <label for="login-password" class="block text-sm font-medium mb-1">Пароль</label>
                     <input type="password" id="login-password" required minlength="6"
                         class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none">
+                    <div class="text-right mt-1">
+                        <span id="forgot-password" class="forgot-password">Забыли пароль?</span>
+                    </div>
                 </div>
                 <div id="login-error" class="text-red-500 text-sm hidden"></div>
                 <button type="submit" class="w-full btn-primary py-2 px-4 rounded-lg transition duration-200">
@@ -113,6 +124,34 @@
                 <p class="text-sm">Нет аккаунта? <button id="show-register" class="text-blue-500 hover:underline">Зарегистрироваться</button></p>
             </div>
         </div>
+        
+        <!-- Восстановление пароля -->
+        <div id="recovery-section" class="rounded-lg card p-6 fade-in hidden">
+            <h2 class="text-xl font-bold text-center mb-4">Восстановление пароля</h2>
+            <form id="recovery-form" class="space-y-3">
+                <div>
+                    <label for="recovery-username" class="block text-sm font-medium mb-1">Имя пользователя</label>
+                    <input type="text" id="recovery-username" required
+                        class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none">
+                </div>
+                <div>
+                    <label for="recovery-phone" class="block text-sm font-medium mb-1">Телефон</label>
+                    <input type="tel" id="recovery-phone" required
+                        class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none">
+                </div>
+                <div id="recovery-error" class="text-red-500 text-sm hidden"></div>
+                <div id="recovery-success" class="text-green-500 text-sm hidden"></div>
+                <button type="submit" class="w-full btn-primary py-2 px-4 rounded-lg transition duration-200 flex items-center justify-center">
+                    <span id="recovery-btn-text">Восстановить пароль</span>
+                    <div id="recovery-loader" class="loader ml-2 hidden"></div>
+                </button>
+            </form>
+            <div class="mt-3 text-center">
+                <p class="text-sm">Вспомнили пароль? <button id="show-login-from-recovery" class="text-blue-500 hover:underline">Войти</button></p>
+            </div>
+        </div>
+
+        
         <!-- Личный кабинет -->
         <div id="dashboard-section" class="rounded-lg card p-6 fade-in hidden">
             <div class="flex justify-between items-center mb-4">
@@ -202,7 +241,17 @@
             // Обработчики форм
             document.getElementById('register-form').addEventListener('submit', registerUser );
             document.getElementById('login-form').addEventListener('submit', loginUser );
+            document.getElementById('forgot-password').addEventListener('click', showRecovery);
+            document.getElementById('show-login-from-recovery').addEventListener('click', showLogin);
+            document.getElementById('recovery-form').addEventListener('submit', recoverPassword);
         });
+
+        function showRecovery() {
+            document.getElementById('login-section').classList.add('hidden');
+            document.getElementById('recovery-section').classList.remove('hidden');
+            document.getElementById('dashboard-section').classList.add('hidden');
+        }
+    
         // Показать форму входа
         function showLogin() {
             document.getElementById('register-section').classList.add('hidden');
@@ -238,9 +287,32 @@
             localStorage.setItem('users', JSON.stringify(users));
             localStorage.setItem('currentUser ', JSON.stringify(user));
         }
-        // Регистрация нового пользователя
-        function registerUser (e) {
+
+        // Восстановление пароля
+        function recoverPassword(e) {
             e.preventDefault();
+            
+            const username = document.getElementById('recovery-username').value.trim();
+            const phone = document.getElementById('recovery-phone').value.trim();
+            
+            showLoader('recovery');
+            
+            // Создаем объект с данными для восстановления
+            const recoveryData = {
+                action: 'recover_password',
+                user: {
+                    Имя_пользователя: username,
+                    Телефон: phone
+                }
+            };
+            // Отправляем данные в бота через Telegram WebApp
+            Telegram.WebApp.sendData(JSON.stringify(recoveryData));
+        }
+    
+        // Регистрация нового пользователя с проверкой
+        function registerUser(e) {
+            e.preventDefault();
+            
             const fio = document.getElementById('fio').value.trim();
             const dob = document.getElementById('dob').value.trim();
             const institute = document.getElementById('institute').value.trim();
@@ -249,6 +321,7 @@
             const vk = document.getElementById('vk').value.trim();
             const password = document.getElementById('reg-password').value;
             const confirmPassword = document.getElementById('reg-confirm').value;
+            
             // Валидация
             const errorElement = document.getElementById('register-error');
             if (password !== confirmPassword) {
@@ -261,32 +334,56 @@
                 errorElement.classList.remove('hidden');
                 return;
             }
-            // Проверяем, есть ли уже пользователь с таким именем пользователя
-            const users = JSON.parse(localStorage.getItem('users') || '{}');
-            const username = document.getElementById('user-phone').value.trim();
-            if (users[username]) {
-                errorElement.textContent = 'Пользователь с таким именем уже существует';
-                errorElement.classList.remove('hidden');
-                return;
-            }
-            // Создаем нового пользователя
-            const newUser  = {
-                Имя_пользователя: username,
-                ФИО_волонтера: fio,
-                Дата_рождения: dob,
-                Институт: institute,
-                Группа: group,
-                Телефон: phone,
-                Ссылка_VK: vk,
-                Пароль: btoa(password), // Базовое "шифрование"
-                Дата_Регистрации: new Date().toISOString()
+            
+            showLoader('register');
+            
+            // Создаем объект с данными пользователя
+            const userData = {
+                action: 'register',
+                user: {
+                    ФИО_волонтера: fio,
+                    Дата_рождения: dob,
+                    Институт: institute,
+                    Группа: group,
+                    Телефон: phone,
+                    Ссылка_VK: vk,
+                    Пароль: password
+                }
             };
-            // Сохраняем пользователя
-            users[username] = newUser ;
-            localStorage.setItem('users', JSON.stringify(users));
-            // Авторизуем пользователя и показываем кабинет
-            showDashboard(newUser );
+            
+            // Сначала проверяем, существует ли пользователь
+            Telegram.WebApp.sendData(JSON.stringify({
+                action: 'check_user',
+                user: {
+                    Телефон: phone
+                }
+            }));
+            
+            // Обработчик ответа от бота
+            Telegram.WebApp.onEvent('webAppDataReceived', function(event) {
+                try {
+                    const data = JSON.parse(event);
+                    
+                    if (data.action === 'check_user') {
+                        if (data.exists) {
+                            // Пользователь уже существует
+                            hideLoader('register');
+                            errorElement.textContent = 'Пользователь с таким телефоном уже зарегистрирован';
+                            errorElement.classList.remove('hidden');
+                        } else {
+                            // Пользователя нет, продолжаем регистрацию
+                            Telegram.WebApp.sendData(JSON.stringify(userData));
+                        }
+                    }
+                } catch (e) {
+                    console.error('Error parsing response:', e);
+                    hideLoader('register');
+                }
+            });
         }
+                        
+
+
         // Вход пользователя
         function loginUser (e) {
             e.preventDefault();
@@ -323,7 +420,40 @@
                 showLogin();
             }
         }
+        // Обработчик событий от Telegram WebApp
+        Telegram.WebApp.onEvent('webAppDataReceived', function(event) {
+            try {
+                const data = JSON.parse(event);
+                
+                if (data.success) {
+                    if (data.action === 'register' || data.action === 'login') {
+                        showDashboard(data.user);
+                    } else if (data.action === 'recover_password') {
+                        // Показываем сообщение об успешном восстановлении
+                        document.getElementById('recovery-error').classList.add('hidden');
+                        const successElement = document.getElementById('recovery-success');
+                        successElement.textContent = 'Новый пароль был отправлен на ваш телефон';
+                        successElement.classList.remove('hidden');
+                        hideLoader('recovery');
+                    }
+                } else {
+                    const errorElement = 
+                        data.action === 'register' ? document.getElementById('register-error') :
+                        data.action === 'login' ? document.getElementById('login-error') :
+                        document.getElementById('recovery-error');
+                    
+                    errorElement.textContent = data.message;
+                    errorElement.classList.remove('hidden');
+                    
+                    hideLoader(data.action);
+                }
+            } catch (e) {
+                console.error('Error parsing response:', e);
+                hideLoader('register');
+                hideLoader('login');
+                hideLoader('recovery');
+            }
+        });
     </script>
 </body>
 </html>
-
