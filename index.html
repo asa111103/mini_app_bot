@@ -54,12 +54,14 @@
                 <div>
                     <label for="institute" class="block text-sm font-medium mb-1">Институт</label>
                     <input type="text" id="institute" required
-                        class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none">
+                        class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none"
+                        placeholder="+7 (XXX) XXX-XX-XX">
                 </div>
                 <div>
                     <label for="group" class="block text-sm font-medium mb-1">Группа</label>
                     <input type="text" id="group" required
-                        class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none">
+                        class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none"
+                        placeholder="https://vk.com/username">
                 </div>
                 <div>
                     <label for="phone" class="block text-sm font-medium mb-1">Телефон</label>
@@ -69,6 +71,11 @@
                 <div>
                     <label for="vk" class="block text-sm font-medium mb-1">Ссылка VK</label>
                     <input type="url" id="vk" required
+                        class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none">
+                </div>
+                <div>
+                    <label for="dobro" class="block text-sm font-medium mb-1">Баллы Добро *</label>
+                    <input type="text" id="dobro" required
                         class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none">
                 </div>
                 <div>
@@ -128,7 +135,7 @@
                     </div>
                     <div>
                         <h3 id="user-fio" class="font-semibold"></h3>
-                        <p id="user-username" class="text-sm opacity-80"></p>
+                        <p id="user-dobro" class="text-sm opacity-80"></p>
                     </div>
                 </div>
                 <div class="mt-4 pt-4 border-t border-gray-200">
@@ -186,6 +193,15 @@
                 const tgUser  = Telegram.WebApp.initDataUnsafe.user;
                 if (tgUser ) {
                     document.getElementById('login-username').value = tgUser .username || '';
+
+                    // Автозаполнение имени из Telegram
+                    const nameInput = document.getElementById('fio');
+                    if (tgUser.first_name) {
+                        nameInput.value = tgUser.first_name;
+                        if (tgUser.last_name) {
+                            nameInput.value += ' ' + tgUser.last_name;
+                        }
+                    }
                 }
             }
             // Проверяем, авторизован ли пользователь
@@ -202,6 +218,12 @@
             // Обработчики форм
             document.getElementById('register-form').addEventListener('submit', registerUser );
             document.getElementById('login-form').addEventListener('submit', loginUser );
+            // Маска для телефона
+            const phoneInput = document.getElementById('phone');
+            phoneInput.addEventListener('input', function(e) {
+                const x = e.target.value.replace(/\D/g, '').match(/(\d{0,1})(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/);
+                e.target.value = !x[2] ? x[1] : '+7 (' + x[2] + (x[3] ? ') ' + x[3] : '') + (x[4] ? '-' + x[4] : '') + (x[5] ? '-' + x[5] : '');
+            });
         });
         // Показать форму входа
         function showLogin() {
@@ -223,14 +245,15 @@
             // Заполняем данные пользователя
             document.getElementById('user-fio').textContent = user.FIO_волонтера;
             document.getElementById('user-username').textContent = user.Имя_пользователя;
-            document.getElementById('user-dob').textContent = user.Дата_рождения;
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('user-dob').textContent = user.Дата_рождения.toLocaleDateString('ru-RU', options);
             document.getElementById('user-institute').textContent = user.Институт;
             document.getElementById('user-group').textContent = user.Группа;
             document.getElementById('user-phone').textContent = user.Телефон;
             document.getElementById('user-vk').textContent = user.Ссылка_VK;
+            document.getElementById('user-dobro').textContent = user.Ссылка_VK;
             // Форматируем дату регистрации
             const regDate = new Date(user.Дата_Регистрации);
-            const options = { year: 'numeric', month: 'long', day: 'numeric' };
             document.getElementById('reg-date').textContent = regDate.toLocaleDateString('ru-RU', options);
             // Сохраняем обновленные данные
             const users = JSON.parse(localStorage.getItem('users') || '{}');
@@ -247,10 +270,48 @@
             const group = document.getElementById('group').value.trim();
             const phone = document.getElementById('phone').value.trim();
             const vk = document.getElementById('vk').value.trim();
+            const dobro = document.getElementById('dobro').value.trim();
             const password = document.getElementById('reg-password').value;
             const confirmPassword = document.getElementById('reg-confirm').value;
             // Валидация
             const errorElement = document.getElementById('register-error');
+
+            if (!fio) {
+                errorElement.textContent = 'Укажите ФИО волонтера';
+                errorElement.classList.remove('hidden');
+                return;
+            }
+
+            if (!dob) {
+                errorElement.textContent = 'Укажите дату рождения';
+                errorElement.classList.remove('hidden');
+                return;
+            }
+
+            if (!institute) {
+                errorElement.textContent = 'Укажите институт';
+                errorElement.classList.remove('hidden');
+                return;
+            }
+
+            if (!group) {
+                errorElement.textContent = 'Укажите группу';
+                errorElement.classList.remove('hidden');
+                return;
+            }
+
+                        if (!phone || phone.length < 11) {
+                errorElement.textContent = 'Укажите корректный номер телефона';
+                errorElement.classList.remove('hidden');
+                return;
+            }
+
+            if (!vk || !vk.startsWith('https://vk.com/')) {
+                errorElement.textContent = 'Укажите корректную ссылку VK (начинается с https://vk.com/)';
+                errorElement.classList.remove('hidden');
+                return;
+            }
+            
             if (password !== confirmPassword) {
                 errorElement.textContent = 'Пароли не совпадают';
                 errorElement.classList.remove('hidden');
@@ -278,6 +339,7 @@
                 Группа: group,
                 Телефон: phone,
                 Ссылка_VK: vk,
+                Добро: dobro;
                 Пароль: btoa(password), // Базовое "шифрование"
                 Дата_Регистрации: new Date().toISOString()
             };
@@ -326,4 +388,3 @@
     </script>
 </body>
 </html>
-
