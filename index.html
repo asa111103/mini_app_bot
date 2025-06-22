@@ -64,14 +64,12 @@
                 <div>
                     <label for="phone" class="block text-sm font-medium mb-1">Телефон</label>
                     <input type="tel" id="phone" required
-                        class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none"
-                        placeholder="+7 (XXX) XXX-XX-XX">
+                        class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none">
                 </div>
                 <div>
                     <label for="vk" class="block text-sm font-medium mb-1">Ссылка VK</label>
                     <input type="url" id="vk" required
-                        class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none"
-                        placeholder="https://vk.com/username">
+                        class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none">
                 </div>
                 <div>
                     <label for="reg-password" class="block text-sm font-medium mb-1">Пароль</label>
@@ -253,43 +251,6 @@
             const confirmPassword = document.getElementById('reg-confirm').value;
             // Валидация
             const errorElement = document.getElementById('register-error');
-
-            if (!fio) {
-                errorElement.textContent = 'Укажите ФИО волонтера';
-                errorElement.classList.remove('hidden');
-                return;
-            }
-
-            if (!dob) {
-                errorElement.textContent = 'Укажите дату рождения';
-                errorElement.classList.remove('hidden');
-                return;
-            }
-
-            if (!institute) {
-                errorElement.textContent = 'Укажите институт';
-                errorElement.classList.remove('hidden');
-                return;
-            }
-
-            if (!group) {
-                errorElement.textContent = 'Укажите группу';
-                errorElement.classList.remove('hidden');
-                return;
-            }
-
-            if (!phone || phone.length < 5) {
-                errorElement.textContent = 'Укажите корректный номер телефона';
-                errorElement.classList.remove('hidden');
-                return;
-            }
-
-            if (!vk || !vk.startsWith('https://vk.com/')) {
-                errorElement.textContent = 'Укажите корректную ссылку VK (начинается с https://vk.com/)';
-                errorElement.classList.remove('hidden');
-                return;
-            }
-            
             if (password !== confirmPassword) {
                 errorElement.textContent = 'Пароли не совпадают';
                 errorElement.classList.remove('hidden');
