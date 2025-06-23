@@ -33,15 +33,6 @@
             background-color: var(--tg-theme-secondary-bg-color, #f3f4f6);
             color: var(--tg-theme-text-color, #000000);
         }
-        .dobro-badge {
-            background-color: #f59e0b;
-            color: white;
-            padding: 0.25rem 0.5rem;
-            border-radius: 9999px;
-            font-weight: bold;
-            display: inline-flex;
-            align-items: center;
-        }
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-4">
@@ -374,18 +365,22 @@
 
         // Получаем мероприятия пользователя
         const userEvents = JSON.parse(localStorage.getItem('userEventParticipation') || '[]')
-            .filter(participation => participation.username === user.Имя_пользователя);
-        
+        .filter(participation => participation.username === user.Имя_пользователя);
+    
         const totalHours = userEvents.reduce((total, event) => total + event.hours, 0);
         document.getElementById('total-hours').textContent = `Общее количество часов: ${totalHours}`;
         
         // Отображение мероприятий
         const eventsList = document.getElementById('events-list');
         eventsList.innerHTML = ''; // Очищаем предыдущие данные
-        userEvents.forEach(event => {
-            const eventItem = document.createElement('div');
-            eventItem.textContent = `${event.Название_мероприятия} (${event.Дата_начала} - ${event.Дата_окончания})`;
-            eventsList.appendChild(eventItem);
+        const allEvents = JSON.parse(localStorage.getItem('events') || '[]'); // Получаем все мероприятия
+        userEvents.forEach(participation => {
+            const event = allEvents.find(e => e.N_протокола == participation.eventId); // Находим мероприятие по ID
+            if (event) {
+                const eventItem = document.createElement('div');
+                eventItem.textContent = `Название: ${event.Название_мероприятия}, Дата: ${event.Дата_начала} - ${event.Дата_окончания}, Часы: ${participation.hours}`;
+                eventsList.appendChild(eventItem);
+            }
         });
     }
 
