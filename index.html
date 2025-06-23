@@ -216,24 +216,7 @@
 <script>
     const isTelegram = window.Telegram && window.Telegram.WebApp;
     document.addEventListener('DOMContentLoaded', function() {
-        const addEventBtn = document.getElementById('add-event-btn');
-        const addParticipantBtn = document.getElementById('add-participant-btn');
-        if (addEventBtn) {
-            addEventBtn.addEventListener('click', () => {
-                document.getElementById('event-section').classList.remove('hidden');
-                document.getElementById('admin-dashboard-section').classList.add('hidden');
-            });
-        } else {
-            console.error('Кнопка "Добавить мероприятие" не найдена');
-        }
-        if (addParticipantBtn) {
-            addParticipantBtn.addEventListener('click', () => {
-                document.getElementById('participation-section').classList.remove('hidden');
-                document.getElementById('admin-dashboard-section').classList.add('hidden');
-            });
-        } else {
-            console.error('Кнопка "Добавить участника" не найдена');
-        }
+
         // Создаем администратора, если пользователей нет
         const users = JSON.parse(localStorage.getItem('users') || '{}');
         if (Object.keys(users).length === 0) {
