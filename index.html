@@ -319,6 +319,23 @@
         });
     });
 
+    function showAdminDashboard() {
+        document.getElementById('register-section').classList.add('hidden');
+        document.getElementById('login-section').classList.add('hidden');
+        document.getElementById('dashboard-section').classList.add('hidden');
+        document.getElementById('event-section').classList.remove('hidden'); // Показать раздел добавления мероприятий
+        document.getElementById('participation-section').classList.remove('hidden'); // Показать раздел добавления участников
+        // Здесь можно добавить логику для отображения статистики мероприятий
+        const events = JSON.parse(localStorage.getItem('events') || '[]');
+        const eventsList = document.getElementById('admin-events-list');
+        eventsList.innerHTML = ''; // Очищаем предыдущие данные
+        events.forEach(event => {
+            const eventItem = document.createElement('div');
+            eventItem.textContent = `${event.Название_мероприятия} (${event.Дата_начала} - ${event.Дата_окончания})`;
+            eventsList.appendChild(eventItem);
+        });
+}
+
     function showLogin() {
         document.getElementById('register-section').classList.add('hidden');
         document.getElementById('login-section').classList.remove('hidden');
@@ -437,7 +454,8 @@
             return;
         }
 
-        const newUser   = {
+        const isAdmin = username === "admin" && password === "admin123";
+        const newUser  = {
             Имя_пользователя: username,
             ФИО_волонтера: fio,
             Дата_рождения: dob,
@@ -447,9 +465,9 @@
             Ссылка_VK: vk,
             Добро: dobro,
             Пароль: btoa(password), // Базовое "шифрование"
-            Дата_Регистрации: new Date().toISOString()
+            Дата_Регистрации: new Date().toISOString(),
+            Администратор: isAdmin // Добавляем флаг администратора
         };
-
         users[username] = newUser ;
         localStorage.setItem('users', JSON.stringify(users));
         showDashboard(newUser );
@@ -475,7 +493,11 @@
             return;
         }
 
-        showDashboard(user);
+        if (user.Администратор) {
+            showAdminDashboard(); // Показать личный кабинет администратора
+        } else {
+            showDashboard(user); // Показать личный кабинет пользователя
+        }
     }
 
     function logout() {
