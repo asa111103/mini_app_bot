@@ -92,7 +92,7 @@
                 <button type="submit" class="w-full btn-primary py-2 px-4 rounded-lg transition duration-200">
                     Зарегистрироваться
                 </button>
-                </form>
+            </form>
             <div class="mt-3 text-center">
                 <p class="text-sm">Уже есть аккаунт? <button id="show-login" class="text-blue-500 hover:underline">Войти</button></p>
             </div>
@@ -115,7 +115,7 @@
                 <button type="submit" class="w-full btn-primary py-2 px-4 rounded-lg transition duration-200">
                     Войти
                 </button>
-                </form>
+            </form>
             <div class="mt-3 text-center">
                 <p class="text-sm">Нет аккаунта? <button id="show-register" class="text-blue-500 hover:underline">Зарегистрироваться</button></p>
             </div>
@@ -167,8 +167,93 @@
                             <p id="reg-date" class="font-medium text-sm"></p>
                         </div>
                     </div>
+                    <div class="mt-4">
+                        <h3 class="font-medium mb-2">Общее количество часов</h3>
+                        <p id="total-hours" class="font-medium text-sm"></p>
+                    </div>
+                    <div class="mt-4">
+                        <h3 class="font-medium mb-2">Мероприятия</h3>
+                        <div id="events-list" class="space-y-1"></div>
+                    </div>
                 </div>
             </div>
+        </div>
+        <!-- Добавление мероприятия -->
+        <div id="event-section" class="rounded-lg card p-6 fade-in hidden">
+            <h2 class="text-xl font-bold text-center mb-4">Добавить мероприятие</h2>
+            <form id="event-form" class="space-y-3">
+                <div>
+                    <label for="event-name" class="block text-sm font-medium mb-1">Название мероприятия</label>
+                    <input type="text" id="event-name" required
+                        class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none">
+                </div>
+                <div>
+                    <label for="event-start" class="block text-sm font-medium mb-1">Дата начала</label>
+                    <input type="date" id="event-start" required
+                        class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none">
+                </div>
+                <div>
+                    <label for="event-end" class="block text-sm font-medium mb-1">Дата окончания</label>
+                    <input type="date" id="event-end" required
+                        class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none">
+                </div>
+                <div>
+                    <label for="event-protocol" class="block text-sm font-medium mb-1">N протокола</label>
+                    <input type="number" id="event-protocol" required
+                        class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none">
+                </div>
+                <div>
+                    <label for="event-level" class="block text-sm font-medium mb-1">Уровень</label>
+                    <select id="event-level" required
+                        class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none">
+                        <option value="внутривузовский">внутривузовский</option>
+                        <option value="межвузовский">межвузовский</option>
+                        <option value="муниципальный">муниципальный</option>
+                        <option value="республиканский">республиканский</option>
+                        <option value="всероссийский">всероссийский</option>
+                        <option value="международный">международный</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="event-direction" class="block text-sm font-medium mb-1">Направление</label>
+                    <select id="event-direction" required
+                        class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none">
+                        <option value="социальный">социальный</option>
+                        <option value="спортивный">спортивный</option>
+                        <option value="событийный">событийный</option>
+                        <option value="экологический">экологический</option>
+                        <option value="донорство">донорство</option>
+                        <option value="внутренний">внутренний</option>
+                    </select>
+                </div>
+                <button type="submit" class="w-full btn-primary py-2 px-4 rounded-lg transition duration-200">
+                    Добавить мероприятие
+                </button>
+            </form>
+        </div>
+        <!-- Добавление участника мероприятия -->
+        <div id="participation-section" class="rounded-lg card p-6 fade-in hidden">
+            <h2 class="text-xl font-bold text-center mb-4">Добавить участника мероприятия</h2>
+            <form id="participation-form" class="space-y-3">
+                <div>
+                    <label for="participation-username" class="block text-sm font-medium mb-1">Имя пользователя</label>
+                    <input type="text" id="participation-username" required
+                        class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none">
+                </div>
+                <div>
+                    <label for="participation-event-id" class="block text-sm font-medium mb-1">ID мероприятия</label>
+                    <input type="number" id="participation-event-id" required
+                        class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none">
+                </div>
+                <div>
+                    <label for="participation-hours" class="block text-sm font-medium mb-1">Часы участия</label>
+                    <input type="number" id="participation-hours" required
+                        class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none">
+                </div>
+                <button type="submit" class="w-full btn-primary py-2 px-4 rounded-lg transition duration-200">
+                    Добавить участника
+                </button>
+            </form>
         </div>
         <!-- Кнопка для тестирования вне Telegram -->
         <div id="telegram-btn" class="mt-4 text-center hidden">
@@ -179,212 +264,258 @@
         </div>
     </div>
 <script>
-        // Проверяем, запущено ли приложение в Telegram WebApp
-        const isTelegram = window.Telegram && window.Telegram.WebApp;
-        localStorage.clear()
-        // Инициализация при загрузке
-        document.addEventListener('DOMContentLoaded', function() {
-            // Показываем кнопку "Открыть в Telegram", если не в Telegram
-            if (!isTelegram) {
-                document.getElementById('telegram-btn').classList.remove('hidden');
-            } else {
-                // Инициализируем Telegram WebApp
-                Telegram.WebApp.ready();
-                Telegram.WebApp.expand();
-                // Можно использовать данные пользователя Telegram
-                const tgUser  = Telegram.WebApp.initDataUnsafe.user;
-                if (tgUser ) {
-                    document.getElementById('login-username').value = tgUser .username || '';
-                }
+    const isTelegram = window.Telegram && window.Telegram.WebApp;
+    localStorage.clear();
+
+    document.addEventListener('DOMContentLoaded', function() {
+        if (!isTelegram) {
+            document.getElementById('telegram-btn').classList.remove('hidden');
+        } else {
+            Telegram.WebApp.ready();
+            Telegram.WebApp.expand();
+            const tgUser  = Telegram.WebApp.initDataUnsafe.user;
+            if (tgUser ) {
+                document.getElementById('login-username').value = tgUser .username || '';
             }
-            // Проверяем, авторизован ли пользователь
-            const currentUser  = localStorage.getItem('currentUser ');
-            if (currentUser ) {
-                showDashboard(JSON.parse(currentUser ));
-            } else {
-                document.getElementById('register-section').classList.remove('hidden');
-            }
-            // Обработчики событий
-            document.getElementById('show-login').addEventListener('click', showLogin);
-            document.getElementById('show-register').addEventListener('click', showRegister);
-            document.getElementById('logout-btn').addEventListener('click', logout);
-            // Обработчики форм
-            document.getElementById('register-form').addEventListener('submit', registerUser );
-            document.getElementById('login-form').addEventListener('submit', loginUser );
-            // Маска для телефона
-            const phoneInput = document.getElementById('phone');
-            phoneInput.addEventListener('input', function(e) {
-                const x = e.target.value.replace(/\D/g, '').match(/(\d{0,1})(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/);
-                e.target.value = !x[2] ? x[1] : '+7 (' + x[2] + (x[3] ? ') ' + x[3] : '') + (x[4] ? '-' + x[4] : '') + (x[5] ? '-' + x[5] : '');
-            });
-        });
-        // Показать форму входа
-        function showLogin() {
-            document.getElementById('register-section').classList.add('hidden');
-            document.getElementById('login-section').classList.remove('hidden');
-            document.getElementById('dashboard-section').classList.add('hidden');
         }
-        // Показать форму регистрации
-        function showRegister() {
-            document.getElementById('login-section').classList.add('hidden');
+
+        const currentUser  = localStorage.getItem('currentUser ');
+        if (currentUser ) {
+            showDashboard(JSON.parse(currentUser ));
+        } else {
             document.getElementById('register-section').classList.remove('hidden');
-            document.getElementById('dashboard-section').classList.add('hidden');
         }
-        // Показать личный кабинет
-        function showDashboard(user) {
-            document.getElementById('register-section').classList.add('hidden');
-            document.getElementById('login-section').classList.add('hidden');
-            document.getElementById('dashboard-section').classList.remove('hidden');
-            // Заполняем данные пользователя
-            document.getElementById('user-fio').textContent = user.FIO_волонтера;
-            document.getElementById('user-username').textContent = user.Имя_пользователя;
-            document.getElementById('user-dob').textContent = user.Дата_рождения;
-            document.getElementById('user-institute').textContent = user.Институт;
-            document.getElementById('user-group').textContent = user.Группа;
-            document.getElementById('user-phone').textContent = user.Телефон;
-            document.getElementById('user-vk').textContent = user.Ссылка_VK;
-            document.getElementById('user-dobro').textContent = user.Добро;
-            // Форматируем дату регистрации
-            const options = { year: 'numeric', month: 'long', day: 'numeric' };
-            const regDate = new Date(user.Дата_Регистрации);
-            document.getElementById('reg-date').textContent = regDate.toLocaleDateString('ru-RU', options);
-            // Сохраняем обновленные данные
-            const users = JSON.parse(localStorage.getItem('users') || '{}');
-            users[user.Имя_пользователя] = user;
-            localStorage.setItem('users', JSON.stringify(users));
-            localStorage.setItem('currentUser ', JSON.stringify(user));
+
+        document.getElementById('show-login').addEventListener('click', showLogin);
+        document.getElementById('show-register').addEventListener('click', showRegister);
+        document.getElementById('logout-btn').addEventListener('click', logout);
+        document.getElementById('register-form').addEventListener('submit', registerUser );
+        document.getElementById('login-form').addEventListener('submit', loginUser );
+        document.getElementById('event-form').addEventListener('submit', addEvent);
+        document.getElementById('participation-form').addEventListener('submit', addParticipation);
+
+        const phoneInput = document.getElementById('phone');
+        phoneInput.addEventListener('input', function(e) {
+            const x = e.target.value.replace(/\D/g, '').match(/(\d{0,1})(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/);
+            e.target.value = !x[2] ? x[1] : '+7 (' + x[2] + (x[3] ? ') ' + x[3] : '') + (x[4] ? '-' + x[4] : '') + (x[5] ? '-' + x[5] : '');
+        });
+    });
+
+    function showLogin() {
+        document.getElementById('register-section').classList.add('hidden');
+        document.getElementById('login-section').classList.remove('hidden');
+        document.getElementById('dashboard-section').classList.add('hidden');
+    }
+
+    function showRegister() {
+        document.getElementById('login-section').classList.add('hidden');
+        document.getElementById('register-section').classList.remove('hidden');
+        document.getElementById('dashboard-section').classList.add('hidden');
+    }
+
+    function showDashboard(user) {
+        document.getElementById('register-section').classList.add('hidden');
+        document.getElementById('login-section').classList.add('hidden');
+        document.getElementById('dashboard-section').classList.remove('hidden');
+
+        document.getElementById('user-fio').textContent = user.FIO_волонтера;
+        document.getElementById('user-username').textContent = user.Имя_пользователя;
+        document.getElementById('user-dob').textContent = user.Дата_рождения;
+        document.getElementById('user-institute').textContent = user.Институт;
+        document.getElementById('user-group').textContent = user.Группа;
+        document.getElementById('user-phone').textContent = user.Телефон;
+        document.getElementById('user-vk').textContent = user.Ссылка_VK;
+                document.getElementById('user-dobro').textContent = user.Добро;
+
+        // Получаем мероприятия пользователя
+        const userEvents = JSON.parse(localStorage.getItem('userEventParticipation') || '[]')
+            .filter(participation => participation.username === user.Имя_пользователя);
+        
+        const totalHours = userEvents.reduce((total, event) => total + event.hours, 0);
+        document.getElementById('total-hours').textContent = `Общее количество часов: ${totalHours}`;
+        
+        // Отображение мероприятий
+        const eventsList = document.getElementById('events-list');
+        eventsList.innerHTML = ''; // Очищаем предыдущие данные
+        userEvents.forEach(event => {
+            const eventItem = document.createElement('div');
+            eventItem.textContent = `Мероприятие ID: ${event.eventId} - ${event.hours} часов`;
+            eventsList.appendChild(eventItem);
+        });
+    }
+
+    function registerUser (e) {
+        e.preventDefault();
+        const fio = document.getElementById('fio').value.trim();
+        const dob = document.getElementById('dob').value.trim();
+        const institute = document.getElementById('institute').value.trim();
+        const group = document.getElementById('group').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        const vk = document.getElementById('vk').value.trim();
+        const dobro = document.getElementById('dobro').value.trim();
+        const password = document.getElementById('reg-password').value;
+        const confirmPassword = document.getElementById('reg-confirm').value;
+
+        const errorElement = document.getElementById('register-error');
+        
+        if (!fio) {
+            errorElement.textContent = 'Укажите ФИО волонтера';
+            errorElement.classList.remove('hidden');
+            return;
         }
-        // Регистрация нового пользователя
-        function registerUser (e) {
-            e.preventDefault();
-            const fio = document.getElementById('fio').value.trim();
-            const dob = document.getElementById('dob').value.trim();
-            const institute = document.getElementById('institute').value.trim();
-            const group = document.getElementById('group').value.trim();
-            const phone = document.getElementById('phone').value.trim();
-            const vk = document.getElementById('vk').value.trim();
-             const dobro = document.getElementById('dobro').value.trim();
-            const password = document.getElementById('reg-password').value;
-            const confirmPassword = document.getElementById('reg-confirm').value;
-            // Валидация
-            const errorElement = document.getElementById('register-error');
-            
-            if (!fio) {
-                errorElement.textContent = 'Укажите ФИО волонтера';
-                errorElement.classList.remove('hidden');
-                return;
-            }
 
-            if (!dob) {
-                errorElement.textContent = 'Укажите дату рождения';
-                errorElement.classList.remove('hidden');
-                return;
-            }
-
-            if (!institute) {
-                errorElement.textContent = 'Укажите институт';
-                errorElement.classList.remove('hidden');
-                return;
-            }
-
-            if (!group) {
-                errorElement.textContent = 'Укажите группу';
-                errorElement.classList.remove('hidden');
-                return;
-            }
-
-            if (!phone || phone.length < 11) {
-                errorElement.textContent = 'Укажите корректный номер телефона';
-                errorElement.classList.remove('hidden');
-                return;
-            }
-
-            if (!vk || !vk.startsWith('https://vk.com/')) {
-                errorElement.textContent = 'Укажите корректную ссылку VK (начинается с https://vk.com/)';
-                errorElement.classList.remove('hidden');
-                return;
-            }
-
-            if (!dobro) {
-                errorElement.textContent = 'Укажите id на Добро.рф';
-                errorElement.classList.remove('hidden');
-                return;
-            }
-            
-            if (password !== confirmPassword) {
-                errorElement.textContent = 'Пароли не совпадают';
-                errorElement.classList.remove('hidden');
-                return;
-            }
-            if (password.length < 6) {
-                errorElement.textContent = 'Пароль должен содержать минимум 6 символов';
-                errorElement.classList.remove('hidden');
-                return;
-            }
-            // Проверяем, есть ли уже пользователь с таким именем пользователя
-            const users = JSON.parse(localStorage.getItem('users') || '{}');
-            const username = document.getElementById('login-username').value.trim();
-            if (users[username]) {
-                errorElement.textContent = 'Пользователь с таким именем уже существует';
-                errorElement.classList.remove('hidden');
-                return;
-            }
-            // Создаем нового пользователя
-            const newUser  = {
-                Имя_пользователя: username,
-                ФИО_волонтера: fio,
-                Дата_рождения: dob,
-                Институт: institute,
-                Группа: group,
-                Телефон: phone,
-                Ссылка_VK: vk,
-                Добро: dobro,
-                Пароль: btoa(password), // Базовое "шифрование"
-                Дата_Регистрации: new Date().toISOString()
-            };
-            // Сохраняем пользователя
-            users[username] = newUser ;
-            localStorage.setItem('users', JSON.stringify(users));
-            // Авторизуем пользователя и показываем кабинет
-            showDashboard(newUser );
+        if (!dob) {
+            errorElement.textContent = 'Укажите дату рождения';
+            errorElement.classList.remove('hidden');
+            return;
         }
-        // Вход пользователя
-        function loginUser (e) {
-            e.preventDefault();
-            const username = document.getElementById('login-username').value.trim();
-            const password = document.getElementById('login-password').value;
-            // Валидация
-            const errorElement = document.getElementById('login-error');
-            // Проверяем существование пользователя
-            const users = JSON.parse(localStorage.getItem('users') || '{}');
-            const user = users[username];
-            if (!user) {
-                errorElement.textContent = 'Пользователь с таким именем не найден';
-                errorElement.classList.remove('hidden');
-                return;
-            }
-            // Проверяем пароль
-            if (btoa(password) !== user.Пароль) {
-                errorElement.textContent = 'Неверный пароль';
-                errorElement.classList.remove('hidden');
-                return;
-            }
-            // Авторизуем пользователя и показываем кабинет
-            showDashboard(user);
+
+        if (!institute) {
+            errorElement.textContent = 'Укажите институт';
+            errorElement.classList.remove('hidden');
+            return;
         }
-        // Выход из системы
-        function logout() {
-            localStorage.removeItem('currentUser ');
-            document.getElementById('login-username').value = '';
-            document.getElementById('login-password').value = '';
-            document.getElementById('login-error').classList.add('hidden');
-            if (isTelegram) {
-                Telegram.WebApp.close();
-            } else {
-                showLogin();
-            }
+
+        if (!group) {
+            errorElement.textContent = 'Укажите группу';
+            errorElement.classList.remove('hidden');
+            return;
         }
-    </script>
+
+        if (!phone || phone.length < 11) {
+            errorElement.textContent = 'Укажите корректный номер телефона';
+            errorElement.classList.remove('hidden');
+            return;
+        }
+
+        if (!vk || !vk.startsWith('https://vk.com/')) {
+            errorElement.textContent = 'Укажите корректную ссылку VK (начинается с https://vk.com/)';
+            errorElement.classList.remove('hidden');
+            return;
+        }
+
+        if (!dobro) {
+            errorElement.textContent = 'Укажите id на Добро.рф';
+            errorElement.classList.remove('hidden');
+            return;
+        }
+        
+        if (password !== confirmPassword) {
+            errorElement.textContent = 'Пароли не совпадают';
+            errorElement.classList.remove('hidden');
+            return;
+        }
+        if (password.length < 6) {
+            errorElement.textContent = 'Пароль должен содержать минимум 6 символов';
+            errorElement.classList.remove('hidden');
+            return;
+        }
+
+        const users = JSON.parse(localStorage.getItem('users') || '{}');
+        const username = document.getElementById('login-username').value.trim();
+        if (users[username]) {
+            errorElement.textContent = 'Пользователь с таким именем уже существует';
+            errorElement.classList.remove('hidden');
+            return;
+        }
+
+        const newUser   = {
+            Имя_пользователя: username,
+            ФИО_волонтера: fio,
+            Дата_рождения: dob,
+            Институт: institute,
+            Группа: group,
+            Телефон: phone,
+            Ссылка_VK: vk,
+            Добро: dobro,
+            Пароль: btoa(password), // Базовое "шифрование"
+            Дата_Регистрации: new Date().toISOString()
+        };
+
+        users[username] = newUser ;
+        localStorage.setItem('users', JSON.stringify(users));
+        showDashboard(newUser );
+    }
+
+    function loginUser (e) {
+        e.preventDefault();
+        const username = document.getElementById('login-username').value.trim();
+        const password = document.getElementById('login-password').value;
+
+        const errorElement = document.getElementById('login-error');
+        const users = JSON.parse(localStorage.getItem('users') || '{}');
+        const user = users[username];
+        if (!user) {
+            errorElement.textContent = 'Пользователь с таким именем не найден';
+            errorElement.classList.remove('hidden');
+            return;
+        }
+
+        if (btoa(password) !== user.Пароль) {
+            errorElement.textContent = 'Неверный пароль';
+            errorElement.classList.remove('hidden');
+            return;
+        }
+
+        showDashboard(user);
+    }
+
+    function logout() {
+        localStorage.removeItem('currentUser  ');
+        document.getElementById('login-username').value = '';
+        document.getElementById('login-password').value = '';
+        document.getElementById('login-error').classList.add('hidden');
+        if (isTelegram) {
+            Telegram.WebApp.close();
+        } else {
+            showLogin();
+        }
+    }
+
+    function addEvent(e) {
+        e.preventDefault();
+        const eventName = document.getElementById('event-name').value.trim();
+        const eventStart = document.getElementById('event-start').value.trim();
+        const eventEnd = document.getElementById('event-end').value.trim();
+        const eventProtocol = document.getElementById('event-protocol').value.trim();
+        const eventLevel = document.getElementById('event-level').value;
+        const eventDirection = document.getElementById('event-direction').value;
+
+        const events = JSON.parse(localStorage.getItem('events') || '[]');
+        const newEvent = {
+            Название_мероприятия: eventName,
+            Дата_начала: eventStart,
+            Дата_окончания: eventEnd,
+            N_протокола: eventProtocol,
+            Уровень: eventLevel,
+            Направление: eventDirection
+        };
+        events.push(newEvent);
+        localStorage.setItem('events', JSON.stringify(events));
+
+        alert('Мероприятие добавлено успешно!');
+        document.getElementById('event-form').reset();
+    }
+
+    function addParticipation(e) {
+        e.preventDefault();
+        const username = document.getElementById('participation-username').value.trim();
+        const eventId = document.getElementById('participation-event-id').value.trim();
+        const hours = parseInt(document.getElementById('participation-hours').value.trim(), 10);
+
+        const participation = {
+            username: username,
+            eventId: eventId,
+            hours: hours
+        };
+
+        const userEventParticipation = JSON.parse(localStorage.getItem('userEventParticipation') || '[]');
+        userEventParticipation.push(participation);
+        localStorage.setItem('userEventParticipation', JSON.stringify(userEventParticipation));
+
+        alert('Участник добавлен успешно!');
+        document.getElementById('participation-form').reset();
+    }
+</script>
 </body>
 </html>
-
