@@ -134,11 +134,24 @@
                         <i class="fas fa-user text-blue-500 text-xl"></i>
                     </div>
                     <div>
-                        <h3 id="user-fio" class="font-semibold"></h3>
+                        <p id="user-fio" class="text-sm opacity-80"></p>
                         <p id="user-username" class="text-sm opacity-80"></p>
-                        <p id="user-dobro" class="text-sm opacity-80"></p>
                     </div>
                 </div>
+                <div class="mt-4 space-y-2">
+                    <div class="info-card flex justify-between items-center">
+                        <div>
+                            <p class="text-xs opacity-70">ID Добро</p>
+                            <p id="user-dobro" class="font-medium text-sm"></p>
+                        </div>
+                        <div>
+                            <p class="text-xs opacity-70">Часы</p>
+                            <div id="total-hours" class="dobro-badge text-sm">
+                                <i class="fas fa-star mr-1"></i>
+                                <span>0</span>
+                            </div>
+                        </div>
+                    </div>
                 <div class="mt-4 pt-4 border-t border-gray-200">
                     <h3 class="font-medium mb-2">Информация о профиле</h3>
                     <div class="grid grid-cols-2 gap-3">
@@ -166,10 +179,6 @@
                             <p class="text-xs opacity-70">Дата регистрации</p>
                             <p id="reg-date" class="font-medium text-sm"></p>
                         </div>
-                    </div>
-                    <div class="mt-4">
-                        <h3 class="font-medium mb-2">Общее количество часов</h3>
-                        <p id="total-hours" class="font-medium text-sm"></p>
                     </div>
                     <div class="mt-4">
                         <h3 class="font-medium mb-2">Мероприятия</h3>
@@ -358,7 +367,7 @@
         eventsList.innerHTML = ''; // Очищаем предыдущие данные
         userEvents.forEach(event => {
             const eventItem = document.createElement('div');
-            eventItem.textContent = `Мероприятие ID: ${event.eventId} - ${event.hours} часов`;
+            eventItem.textContent = `Название: ${event.eventName} - `Дата: ${event.eventEnd} - ${event.hours} часов`;
             eventsList.appendChild(eventItem);
         });
     }
