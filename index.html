@@ -33,6 +33,15 @@
             background-color: var(--tg-theme-secondary-bg-color, #f3f4f6);
             color: var(--tg-theme-text-color, #000000);
         }
+        .dobro-badge {
+            background-color: #f59e0b;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+        }
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-4">
@@ -155,6 +164,10 @@
                 <div class="mt-4 pt-4 border-t border-gray-200">
                     <h3 class="font-medium mb-2">Информация о профиле</h3>
                     <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <p class="text-xs opacity-70">ФИО</p>
+                            <p id="user-fio" class="font-medium text-sm"></p>
+                        </div>
                         <div>
                             <p class="text-xs opacity-70">Дата рождения</p>
                             <p id="user-dob" class="font-medium text-sm"></p>
@@ -367,7 +380,7 @@
         eventsList.innerHTML = ''; // Очищаем предыдущие данные
         userEvents.forEach(event => {
             const eventItem = document.createElement('div');
-            eventItem.textContent = `Название: ${event.eventName} - Дата: ${event.eventEnd} - ${event.hours} часов`;
+            eventItem.textContent = `Название: ${event.event.name} - Дата: ${event.event.end} - ${event.hours} часов`;
             eventsList.appendChild(eventItem);
         });
     }
