@@ -33,6 +33,12 @@
             background-color: var(--tg-theme-secondary-bg-color, #f3f4f6);
             color: var(--tg-theme-text-color, #000000);
         }
+        .card {
+            transition: background-color 0.3s;
+        }
+        .card:hover {
+            background-color: #f0f0f0; /* Цвет при наведении */
+        }
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-4">
@@ -364,22 +370,29 @@
         document.getElementById('reg-date').textContent = regDate.toLocaleDateString('ru-RU', options);
 
         // Получаем мероприятия пользователя
-        const userEvents = JSON.parse(localStorage.getItem('userEventParticipation') || '[]')
-        .filter(participation => participation.username === user.Имя_пользователя);
-    
-        const totalHours = userEvents.reduce((total, event) => total + event.hours, 0);
-        document.getElementById('total-hours').textContent = `Общее количество часов: ${totalHours}`;
-        
-        // Отображение мероприятий
-        const eventsList = document.getElementById('events-list');
         eventsList.innerHTML = ''; // Очищаем предыдущие данные
-        const allEvents = JSON.parse(localStorage.getItem('events') || '[]'); // Получаем все мероприятия
-        userEvents.forEach(participation => {
-            const event = allEvents.find(e => e.N_протокола == participation.eventId); // Находим мероприятие по ID
-            if (event) {
-                const eventItem = document.createElement('div');
-                eventItem.textContent = `Название: ${event.Название_мероприятия}, Дата: ${event.Дата_начала} - ${event.Дата_окончания}, Часы: ${participation.hours}`;
-                eventsList.appendChild(eventItem);
+    const allEvents = JSON.parse(localStorage.getItem('events') || '[]'); // Получаем все мероприятия
+    userEvents.forEach(participation => {
+        const event = allEvents.find(e => e.N_протокола == participation.eventId); // Находим мероприятие по ID
+        if (event) {
+            const card = document.createElement('div');
+            card.className = 'border rounded-lg p-4 mb-4 cursor-pointer';
+            card.innerHTML = `
+                <h3 class="font-semibold">${event.Название_мероприятия}</h3>
+                <p>Дата: ${event.Дата_начала} - ${event.Дата_окончания}</p>
+                <p>Часы: ${participation.hours}</p>
+                <div class="hidden detail-info mt-2">
+                    <p><strong>Уровень:</strong> ${event.Уровень}</p>
+                    <p><strong>Направление:</strong> ${event.Направление}</p>
+                </div>
+            `;
+            eventsList.appendChild(card);
+
+            // Добавляем обработчик события для раскрытия подробной информации
+                card.addEventListener('click', () => {
+                    const detailInfo = card.querySelector('.detail-info');
+                    detailInfo.classList.toggle('hidden'); // Переключаем видимость подробной информации
+                });
             }
         });
     }
