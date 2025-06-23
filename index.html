@@ -459,25 +459,8 @@
             return;
         }
 
-        const newUser   = {
-            Имя_пользователя: username,
-            ФИО_волонтера: fio,
-            Дата_рождения: dob,
-            Институт: institute,
-            Группа: group,
-            Телефон: phone,
-            Ссылка_VK: vk,
-            Добро: dobro,
-            Пароль: btoa(password), // Базовое "шифрование"
-            Дата_Регистрации: new Date().toISOString()
-        };
-
-        users[username] = newUser ;
-        localStorage.setItem('users', JSON.stringify(users));
-        showDashboard(newUser );
-
         const isAdmin = username === "admin" && password === "admin123";
-        newUser  = {
+        const newUser  = {
             Имя_пользователя: username,
             ФИО_волонтера: fio,
             Дата_рождения: dob,
