@@ -370,6 +370,12 @@
         document.getElementById('reg-date').textContent = regDate.toLocaleDateString('ru-RU', options);
 
         // Получаем мероприятия пользователя
+        const userEvents = JSON.parse(localStorage.getItem('userEventParticipation') || '[]')
+            .filter(participation => participation.username === user.Имя_пользователя);
+        
+        const totalHours = userEvents.reduce((total, event) => total + event.hours, 0);
+        document.getElementById('total-hours').textContent = `Общее количество часов: ${totalHours}`;
+
         eventsList.innerHTML = ''; // Очищаем предыдущие данные
         const allEvents = JSON.parse(localStorage.getItem('events') || '[]'); // Получаем все мероприятия
         userEvents.forEach(participation => {
