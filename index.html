@@ -367,7 +367,7 @@
         eventsList.innerHTML = ''; // Очищаем предыдущие данные
         userEvents.forEach(event => {
             const eventItem = document.createElement('div');
-            eventItem.textContent = `Название: ${event.eventName} - `Дата: ${event.eventEnd} - ${event.hours} часов`;
+            eventItem.textContent = `Название: ${event.eventName} - Дата: ${event.eventEnd} - ${event.hours} часов`;
             eventsList.appendChild(eventItem);
         });
     }
