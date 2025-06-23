@@ -267,7 +267,30 @@
     const isTelegram = window.Telegram && window.Telegram.WebApp;
     localStorage.clear();
 
+    
+
     document.addEventListener('DOMContentLoaded', function() {
+
+        // Создаем администратора, если пользователей нет
+        const users = JSON.parse(localStorage.getItem('users') || '{}');
+        if (Object.keys(users).length === 0) {
+            const adminUser  = {
+                Имя_пользователя: "admin",
+                ФИО_волонтера: "Администратор",
+                Дата_рождения: "2000-01-01",
+                Институт: "Административный",
+                Группа: "Админ",
+                Телефон: "+7 (000) 000-00-00",
+                Ссылка_VK: "https://vk.com/admin",
+                Добро: "admin123",
+                Пароль: btoa("admin123"), // Базовое "шифрование"
+                Дата_Регистрации: new Date().toISOString(),
+                Администратор: true // Флаг администратора
+            };
+            users["admin"] = adminUser ;
+            localStorage.setItem('users', JSON.stringify(users));
+        }
+        
         if (!isTelegram) {
             document.getElementById('telegram-btn').classList.remove('hidden');
         } else {
@@ -325,7 +348,7 @@
         document.getElementById('user-group').textContent = user.Группа;
         document.getElementById('user-phone').textContent = user.Телефон;
         document.getElementById('user-vk').textContent = user.Ссылка_VK;
-                document.getElementById('user-dobro').textContent = user.Добро;
+        document.getElementById('user-dobro').textContent = user.Добро;
 
         // Получаем мероприятия пользователя
         const userEvents = JSON.parse(localStorage.getItem('userEventParticipation') || '[]')
@@ -340,6 +363,23 @@
         userEvents.forEach(event => {
             const eventItem = document.createElement('div');
             eventItem.textContent = `Мероприятие ID: ${event.eventId} - ${event.hours} часов`;
+            eventsList.appendChild(eventItem);
+        });
+    }
+
+    function showAdminDashboard() {
+        document.getElementById('register-section').classList.add('hidden');
+        document.getElementById('login-section').classList.add('hidden');
+        document.getElementById('dashboard-section').classList.add('hidden');
+        document.getElementById('event-section').classList.remove('hidden'); // Показать раздел добавления мероприятий
+        document.getElementById('participation-section').classList.remove('hidden'); // Показать раздел добавления участников
+        // Здесь можно добавить логику для отображения статистики мероприятий
+        const events = JSON.parse(localStorage.getItem('events') || '[]');
+        const eventsList = document.getElementById('admin-events-list');
+        eventsList.innerHTML = ''; // Очищаем предыдущие данные
+        events.forEach(event => {
+            const eventItem = document.createElement('div');
+            eventItem.textContent = `${event.Название_мероприятия} (${event.Дата_начала} - ${event.Дата_окончания})`;
             eventsList.appendChild(eventItem);
         });
     }
@@ -435,6 +475,25 @@
         users[username] = newUser ;
         localStorage.setItem('users', JSON.stringify(users));
         showDashboard(newUser );
+
+        const isAdmin = username === "admin" && password === "admin123";
+        const newUser  = {
+            Имя_пользователя: username,
+            ФИО_волонтера: fio,
+            Дата_рождения: dob,
+            Институт: institute,
+            Группа: group,
+            Телефон: phone,
+            Ссылка_VK: vk,
+            Добро: dobro,
+            Пароль: btoa(password), // Базовое "шифрование"
+            Дата_Регистрации: new Date().toISOString(),
+            Администратор: isAdmin // Добавляем флаг администратора
+        };
+        users[username] = newUser ;
+        localStorage.setItem('users', JSON.stringify(users));
+        showDashboard(newUser );
+    }
     }
 
     function loginUser (e) {
@@ -457,7 +516,12 @@
             return;
         }
 
-        showDashboard(user);
+        if (user.Администратор) {
+            showAdminDashboard(); // Показать личный кабинет администратора
+        } else {
+            showDashboard(user); // Показать личный кабинет пользователя
+        }
+
     }
 
     function logout() {
