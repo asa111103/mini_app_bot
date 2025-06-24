@@ -42,24 +42,6 @@
             display: inline-flex;
             align-items: center;
         }
-        .card {
-            transition: background-color 0.3s;
-        }
-        .Button_primary-button__PXJSR {
-            background-color: #540575;
-            border: 1px solid transparent;
-            color: #ffffff;
-        }
-        .Button_button__GeQ2O {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 14px 15px;
-            background-color: transparent;
-            outline: none!important;
-            color: #000;
-            border-radius: 8px;
-        }
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-4">
@@ -121,7 +103,7 @@
                 </button>
             </form>
             <div class="mt-3 text-center">
-                <p class="text-sm">Уже есть аккаунт? <button id="show-login" class="text-blue-500 hover:underline">Войти</button></p>
+                <p class="text-sm">Уже есть аккаунт? <button id="show-login" class="text-orange-500 hover:underline">Войти</button></p>
             </div>
         </div>
         <!-- Вход -->
@@ -144,7 +126,29 @@
                 </button>
             </form>
             <div class="mt-3 text-center">
-                <p class="text-sm">Нет аккаунта? <button id="show-register" class="text-blue-500 hover:underline">Зарегистрироваться</button></p>
+                <p class="text-sm">Нет аккаунта? <button id="show-register" class="text-orange-500 hover:underline">Зарегистрироваться</button></p>
+            </div>
+        </div>
+        <!-- Личный кабинет администратора -->
+        <div id="admin-dashboard-section" class="rounded-lg card p-6 fade-in hidden">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold">Личный кабинет администратора</h2>
+                <button id="logout-btn" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+            <div class="space-y-4">
+                <button id="add-event-btn" class="w-full btn-primary py-2 px-4 rounded-lg transition duration-200">
+                    Добавить мероприятие
+                </button>
+                <button id="add-participant-btn" class="w-full btn-primary py-2 px-4 rounded-lg transition duration-200">
+                    Добавить участника
+                </button>
+                <div id="admin-stats" class="mt-4">
+                    <h3 class="font-medium mb-2">Статистика</h3>
+                    <p>Количество волонтеров: <span id="volunteer-count">0</span></p>
+                    <p>Количество мероприятий: <span id="event-count">0</span></p>
+                </div>
             </div>
         </div>
         <!-- Личный кабинет -->
@@ -157,106 +161,49 @@
             </div>
             <div class="space-y-3">
                 <div class="flex items-center">
-                    <div class="w-12 h-12 rounded-full text-purple-300 flex items-center justify-center mr-3">
-                        <i class="fas fa-user text-purple-700 text-xl"></i>
+                    <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                        <i class="fas fa-user text-blue-500 text-xl"></i>
                     </div>
                     <div>
-                        <p id="user-fio" class="text-sm opacity-80"></p>
+                        <h3 id="user-fio" class="font-semibold"></h3>
                         <p id="user-username" class="text-sm opacity-80"></p>
+                        <p id="user-dobro" class="text-sm opacity-80"></p>
                     </div>
                 </div>
-                <div class="mt-4 space-y-2">
-                    <div class="info-card flex justify-between items-center">
+                <div class="mt-4 pt-4 border-t border-gray-200">
+                    <h3 class="font-medium mb-2">Информация о профиле</h3>
+                    <div class="grid grid-cols-2 gap-3">
                         <div>
-                            <p class="text-xs opacity-70">ID Добро</p>
-                            <p id="user-dobro" class="font-medium text-sm"></p>
+                            <p class="text-xs opacity-70">Дата рождения</p>
+                            <p id="user-dob" class="font-medium text-sm"></p>
                         </div>
                         <div>
-                            <p class="text-xs opacity-70">Часы</p>
-                            <div id="total-hours" class="dobro-badge text-sm">
-                                <i class="fa fa-clock-o" aria-hidden="true"></i>
-                                <span>0</span>
-                            </div>
+                            <p class="text-xs opacity-70">Институт</p>
+                            <p id="user-institute" class="font-medium text-sm"></p>
+                        </div>
+                        <div>
+                            <p class="text-xs opacity-70">Группа</p>
+                            <p id="user-group" class="font-medium text-sm"></p>
+                        </div>
+                        <div>
+                            <p class="text-xs opacity-70">Телефон</p>
+                            <p id="user-phone" class="font-medium text-sm"></p>
+                        </div>
+                        <div>
+                            <p class="text-xs opacity-70">Ссылка VK</p>
+                            <p id="user-vk" class="font-medium text-sm"></p>
+                        </div>
+                        <div>
+                            <p class="text-xs opacity-70">Дата регистрации</p>
+                            <p id="reg-date" class="font-medium text-sm"></p>
                         </div>
                     </div>
-                    <div class="mt-4 pt-4 border-t border-gray-200">
-                        <h3 class="font-medium mb-2">Информация о профиле</h3>
-                        <div class="grid grid-cols-2 gap-3">
-                            <div>
-                                <p class="text-xs opacity-70">Дата рождения</p>
-                                <p id="user-dob" class="font-medium text-sm"></p>
-                            </div>
-                            <div>
-                                <p class="text-xs opacity-70">Институт</p>
-                                <p id="user-institute" class="font-medium text-sm"></p>
-                            </div>
-                            <div>
-                                <p class="text-xs opacity-70">Группа</p>
-                                <p id="user-group" class="font-medium text-sm"></p>
-                            </div>
-                            <div>
-                                <p class="text-xs opacity-70">Телефон</p>
-                                <p id="user-phone" class="font-medium text-sm"></p>
-                            </div>
-                            <div>
-                                <p class="text-xs opacity-70">Ссылка VK</p>
-                                <p id="user-vk" class="font-medium text-sm"></p>
-                            </div>
-                            <div>
-                                <p class="text-xs opacity-70">Дата регистрации</p>
-                                <p id="reg-date" class="font-medium text-sm"></p>
-                            </div>
-                        </div>
-                        <div class="mt-4">
-                            <h3 class="font-medium mb-2">Статус заявки на волонтерскую книгу</h3>
-                            <p id="book-application-status" class="font-medium text-sm"></p>
-                        </div>
-                        <div class="mt-4">
-                            <h3 class="font-medium mb-2">Мероприятия</h3>
-                            <div id="events-list" class="space-y-1"></div>
-                        </div>
+                    <div class="mt-4">
+                        <h3 class="font-medium mb-2">Мероприятия</h3>
+                        <div id="events-list" class="space-y-1"></div>
                     </div>
                 </div>
-                <button id="apply-book-btn" class="w-full btn-primary py-2 px-4 rounded-lg transition duration-200">
-                    Подать заявку на волонтерскую книгу
-                </button>
             </div>
-        </div>
-        <!-- Форма заявки на волонтерскую книгу -->
-        <div id="book-application-section" class="rounded-lg card p-6 fade-in hidden">
-            <h2 class="text-xl font-bold text-center mb-4">Заявка на волонтерскую книгу</h2>
-            <form id="book-application-form" class="space-y-3">
-                <div>
-                    <label for="book-dobro-id" class="block text-sm font-medium mb-1">ID Добро</label>
-                    <input type="number" id="book-dobro-id" required
-                        class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none">
-                </div>
-                <div>
-                    <label for="book-fio" class="block text-sm font-medium mb-1">ФИО волонтера</label>
-                    <input type="text" id="book-fio" required
-                        class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none">
-                </div>
-                <div>
-                    <label for="book-dob" class="block text-sm font-medium mb-1">Дата рождения</label>
-                    <input type="date" id="book-dob" required
-                        class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none">
-                </div>
-                <div>
-                    <label for="book-institute" class="block text-sm font-medium mb-1">Место учебы</label>
-                    <input type="text" id="book-institute" required
-                        class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none">
-                </div>
-                <div>
-                    <label for="book-phone" class="block text-sm font-medium mb-1">Телефон</label>
-                    <input type="tel" id="book-phone" required
-                        class="w-full px-3 py-2 rounded-lg border input-field focus:outline-none"
-                        placeholder="+7 (XXX) XXX-XX-XX">
-                </div>
-                <button type="submit" class="w-full btn-primary py-2 px-4 rounded-lg transition duration-200">
-                    Отправить заявку
-                </button>
-            </form>
-            <div id="book-application-error" class="text-red-500 text-sm hidden"></div>
         </div>
         <!-- Кнопка для тестирования вне Telegram -->
         <div id="telegram-btn" class="mt-4 text-center hidden">
@@ -268,11 +215,11 @@
     </div>
 <script>
     const isTelegram = window.Telegram && window.Telegram.WebApp;
-
     document.addEventListener('DOMContentLoaded', function() {
+        // Создаем администратора, если пользователей нет
         const users = JSON.parse(localStorage.getItem('users') || '{}');
         if (Object.keys(users).length === 0) {
-            const adminUser   = {
+            const adminUser    = {
                 Имя_пользователя: "admin",
                 ФИО_волонтера: "Администратор",
                 Дата_рождения: "2000-01-01",
@@ -285,23 +232,29 @@
                 Дата_Регистрации: new Date().toISOString(),
                 Администратор: true // Флаг администратора
             };
-            users["admin"] = adminUser  ;
+            users["admin"] = adminUser   ;
             localStorage.setItem('users', JSON.stringify(users));
         }
+        
         if (!isTelegram) {
             document.getElementById('telegram-btn').classList.remove('hidden');
         } else {
             Telegram.WebApp.ready();
             Telegram.WebApp.expand();
-            const tgUser   = Telegram.WebApp.initDataUnsafe.user;
-            if (tgUser  ) {
-                document.getElementById('login-username').value = tgUser  .username || '';
+            const tgUser    = Telegram.WebApp.initDataUnsafe.user;
+            if (tgUser   ) {
+                document.getElementById('login-username').value = tgUser   .username || '';
             }
         }
 
-        const currentUser   = localStorage.getItem('currentUser   ');
-        if (currentUser  ) {
-            showDashboard(JSON.parse(currentUser  ));
+        const currentUser    = localStorage.getItem('currentUser   ');
+        if (currentUser   ) {
+            const user = JSON.parse(currentUser   );
+            if (user.Администратор) {
+                showAdminDashboard(); // Показать личный кабинет администратора
+            } else {
+                showDashboard(user); // Показать личный кабинет пользователя
+            }
         } else {
             document.getElementById('register-section').classList.remove('hidden');
         }
@@ -309,100 +262,109 @@
         document.getElementById('show-login').addEventListener('click', showLogin);
         document.getElementById('show-register').addEventListener('click', showRegister);
         document.getElementById('logout-btn').addEventListener('click', logout);
-        document.getElementById('register-form').addEventListener('submit', registerUser  );
-        document.getElementById('login-form').addEventListener('submit', loginUser  );
-        document.getElementById('book-application-form').addEventListener('submit', addBookApplication);
+        document.getElementById('register-form').addEventListener('submit', registerUser   );
+        document.getElementById('login-form').addEventListener('submit', loginUser   );
+        document.getElementById('event-form').addEventListener('submit', addEvent);
+        document.getElementById('participation-form').addEventListener('submit', addParticipation);
 
-        const phoneInput = document.getElementById('phone');
-        phoneInput.addEventListener('input', function(e) {
-            const x = e.target.value.replace(/\D/g, '').match(/(\d{0,1})(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/);
-            e.target.value = !x[2] ? x[1] : '+7 (' + x[2] + (x[3] ? ') ' + x[3] : '') + (x[4] ? '-' + x[4] : '') + (x[5] ? '-' + x[5] : '');
+        // Кнопки для администратора
+        document.getElementById('add-event-btn').addEventListener('click', () => {
+            document.getElementById('event-section').classList.remove('hidden');
+            document.getElementById('admin-dashboard-section').classList.add('hidden');
+        });
+        document.getElementById('add-participant-btn').addEventListener('click', () => {
+            document.getElementById('participation-section').classList.remove('hidden');
+            document.getElementById('admin-dashboard-section').classList.add('hidden');
         });
 
-        document.getElementById('apply-book-btn').addEventListener('click', function() {
-            document.getElementById('book-application-section').classList.remove('hidden');
-        });
+        // Обновление статистики
+        updateAdminStats();
     });
+
+    function updateAdminStats() {
+        const users = JSON.parse(localStorage.getItem('users') || '{}');
+        const events = JSON.parse(localStorage.getItem('events') || '[]');
+        document.getElementById('volunteer-count').textContent = Object.keys(users).length;
+        document.getElementById('event-count').textContent = events.length;
+    }
 
     function showLogin() {
         document.getElementById('register-section').classList.add('hidden');
         document.getElementById('login-section').classList.remove('hidden');
         document.getElementById('dashboard-section').classList.add('hidden');
+        document.getElementById('admin-dashboard-section').classList.add('hidden');
     }
 
     function showRegister() {
         document.getElementById('login-section').classList.add('hidden');
         document.getElementById('register-section').classList.remove('hidden');
         document.getElementById('dashboard-section').classList.add('hidden');
+        document.getElementById('admin-dashboard-section').classList.add('hidden');
     }
 
     function showDashboard(user) {
         document.getElementById('register-section').classList.add('hidden');
         document.getElementById('login-section').classList.add('hidden');
         document.getElementById('dashboard-section').classList.remove('hidden');
+        document.getElementById('admin-dashboard-section').classList.add('hidden');
 
         document.getElementById('user-fio').textContent = user.ФИО_волонтера;
         document.getElementById('user-username').textContent = user.Имя_пользователя;
-        const options = { year: 'numeric', month: 'long', day: 'numeric' };
-        const userDate = new Date(user.Дата_рождения);
-        document.getElementById('user-dob').textContent = userDate.toLocaleDateString('ru-RU', options);
+        document.getElementById('user-dob').textContent = user.Дата_рождения;
         document.getElementById('user-institute').textContent = user.Институт;
         document.getElementById('user-group').textContent = user.Группа;
         document.getElementById('user-phone').textContent = user.Телефон;
         document.getElementById('user-vk').textContent = user.Ссылка_VK;
         document.getElementById('user-dobro').textContent = user.Добро;
         const regDate = new Date(user.Дата_Регистрации);
-        document.getElementById('reg-date').textContent = regDate.toLocaleDateString('ru-RU', options);
+        document.getElementById('reg-date').textContent = regDate.toLocaleDateString('ru-RU');
 
         // Получаем мероприятия пользователя
         const userEvents = JSON.parse(localStorage.getItem('userEventParticipation') || '[]')
             .filter(participation => participation.username === user.Имя_пользователя);
         
         const totalHours = userEvents.reduce((total, event) => total + event.hours, 0);
-        document.getElementById('total-hours').textContent = `Общее количество часов: ${totalHours}`;
-        
-        // Отображение мероприятий
+        document.getElementById('total-hours').textContent = `${totalHours}`;
+
         const eventsList = document.getElementById('events-list');
         eventsList.innerHTML = ''; // Очищаем предыдущие данные
-        userEvents.forEach(event => {
-            const eventItem = document.createElement('div');
-            eventItem.textContent = `Мероприятие ID: ${event.eventId} - ${event.hours} часов`;
-            eventsList.appendChild(eventItem);
-        });
+        const allEvents = JSON.parse(localStorage.getItem('events') || '[]'); // Получаем все мероприятия
+        userEvents.forEach(participation => {
+            const event = allEvents.find(e => e.N_протокола == participation.eventId); // Находим мероприятие по ID
+            if (event) {
+                const card = document.createElement('div');
+                    card.className = 'border rounded-lg p-4 mb-4 cursor-pointer';
+                const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                const startDate = new Date(event.Дата_начала);
+                const endDate = new Date(event.Дата_окончания);
+                card.innerHTML = `
+                    <h3 class="font-semibold">${event.Название_мероприятия}</h3>
+                    <p>Дата: ${startDate.toLocaleDateString('ru-RU', options)} - ${endDate.toLocaleDateString('ru-RU', options)}</p>
+                    <p>Часы: ${participation.hours}</p>
+                    <div class="hidden detail-info mt-2">
+                        <p><strong>Уровень:</strong> ${event.Уровень}</p>
+                        <p><strong>Направление:</strong> ${event.Направление}</p>
+                    </div>
+                `;
+                eventsList.appendChild(card);
 
-        // Отображение статуса заявки на волонтерскую книгу
-        displayBookApplicationStatus();
+                // Добавляем обработчик события для раскрытия подробной информации
+                card.addEventListener('click', () => {
+                    const detailInfo = card.querySelector('.detail-info');
+                    detailInfo.classList.toggle('hidden'); // Переключаем видимость подробной информации
+                });
+            }
+        });
     }
 
     function showAdminDashboard() {
         document.getElementById('register-section').classList.add('hidden');
         document.getElementById('login-section').classList.add('hidden');
         document.getElementById('dashboard-section').classList.add('hidden');
-        document.getElementById('event-section').classList.remove('hidden'); // Показать раздел добавления мероприятий
-        document.getElementById('participation-section').classList.remove('hidden'); // Показать раздел добавления участников
-        // Здесь можно добавить логику для отображения статистики мероприятий
-        const events = JSON.parse(localStorage.getItem('events') || '[]');
-        const eventsList = document.getElementById('admin-events-list');
-        eventsList.innerHTML = ''; // Очищаем предыдущие данные
-        events.forEach(event => {
-            const eventItem = document.createElement('div');
-            eventItem.textContent = `${event.Название_мероприятия} (${event.Дата_начала} - ${event.Дата_окончания})`;
-            eventsList.appendChild(eventItem);
-        });
-    }
+        document.getElementById('admin-dashboard-section').classList.remove('hidden');
 
-    function displayBookApplicationStatus() {
-        const bookApplications = JSON.parse(localStorage.getItem('bookApplications') || '[]');
-        const currentUser  = JSON.parse(localStorage.getItem('currentUser   '));
-
-        if (currentUser ) {
-            const existingApplication = bookApplications.find(app => app.Телефон === currentUser .Телефон);
-            if (existingApplication) {
-                document.getElementById('book-application-status').textContent = 'Вы уже подали заявку на волонтерскую книгу.';
-            } else {
-                document.getElementById('book-application-status').textContent = 'Заявка не подана.';
-            }
-        }
+        // Обновляем статистику
+        updateAdminStats();
     }
 
     function registerUser (e) {
@@ -481,7 +443,7 @@
         }
 
         const isAdmin = username === "admin" && password === "admin123";
-        const newUser  = {
+        const newUser   = {
             Имя_пользователя: username,
             ФИО_волонтера: fio,
             Дата_рождения: dob,
@@ -494,9 +456,9 @@
             Дата_Регистрации: new Date().toISOString(),
             Администратор: isAdmin // Добавляем флаг администратора
         };
-        users[username] = newUser ;
+        users[username] = newUser  ;
         localStorage.setItem('users', JSON.stringify(users));
-        showDashboard(newUser );
+        showDashboard(newUser  );
     }
 
     function loginUser (e) {
@@ -519,7 +481,6 @@
             return;
         }
 
-        localStorage.setItem('currentUser   ', JSON.stringify(user));
         if (user.Администратор) {
             showAdminDashboard(); // Показать личный кабинет администратора
         } else {
@@ -539,52 +500,49 @@
         }
     }
 
-    function addBookApplication(e) {
+    function addEvent(e) {
         e.preventDefault();
-        const dobroId = document.getElementById('book-dobro-id').value.trim();
-        const fio = document.getElementById('book-fio').value.trim();
-        const dob = document.getElementById('book-dob').value.trim();
-        const institute = document.getElementById('book-institute').value.trim();
-        const phone = document.getElementById('book-phone').value.trim();
+        const eventName = document.getElementById('event-name').value.trim();
+        const eventStart = document.getElementById('event-start').value.trim();
+        const eventEnd = document.getElementById('event-end').value.trim();
+        const eventProtocol = document.getElementById('event-protocol').value.trim();
+        const eventLevel = document.getElementById('event-level').value;
+        const eventDirection = document.getElementById('event-direction').value;
 
-        const errorElement = document.getElementById('book-application-error');
-        errorElement.classList.add('hidden');
+        const events = JSON.parse(localStorage.getItem('events') || '[]');
+        const newEvent = {
+            Название_мероприятия: eventName,
+            Дата_начала: eventStart,
+            Дата_окончания: eventEnd,
+            N_протокола: eventProtocol,
+            Уровень: eventLevel,
+            Направление: eventDirection
+        };
+        events.push(newEvent);
+        localStorage.setItem('events', JSON.stringify(events));
 
-        if (!dobroId || !fio || !dob || !institute || !phone) {
-            errorElement.textContent = 'Пожалуйста, заполните все поля.';
-            errorElement.classList.remove('hidden');
-            return;
-        }
+        alert('Мероприятие добавлено успешно!');
+        document.getElementById('event-form').reset();
+    }
 
-        const bookApplications = JSON.parse(localStorage.getItem('bookApplications') || '[]');
-        const currentUser  = JSON.parse(localStorage.getItem('currentUser   '));
+    function addParticipation(e) {
+        e.preventDefault();
+        const username = document.getElementById('participation-username').value.trim();
+        const eventId = document.getElementById('participation-event-id').value.trim();
+        const hours = parseInt(document.getElementById('participation-hours').value.trim(), 10);
 
-        // Проверка на наличие уже поданной заявки
-        const existingApplication = bookApplications.find(app => app.Телефон === phone);
-        if (existingApplication) {
-            errorElement.textContent = 'Вы уже подали заявку на волонтерскую книгу.';
-            errorElement.classList.remove('hidden');
-            return;
-        }
-
-        const newApplication = {
-            ID_Добро: parseInt(dobroId),
-            Дата_выдачи: new Date().toISOString().split('T')[0], // Текущая дата
-            ФИО_волонтера: fio,
-            Дата_рождения: dob,
-            Место_учебы: institute,
-            Телефон: phone
+        const participation = {
+            username: username,
+            eventId: eventId,
+            hours: hours
         };
 
-        bookApplications.push(newApplication);
-        localStorage.setItem('bookApplications', JSON.stringify(bookApplications));
+        const userEventParticipation = JSON.parse(localStorage.getItem('userEventParticipation') || '[]');
+        userEventParticipation.push(participation);
+        localStorage.setItem('userEventParticipation', JSON.stringify(userEventParticipation));
 
-        // Обновление статуса заявки в личном кабинете
-        document.getElementById('book-application-status').textContent = 'Заявка подана успешно!';
-
-        alert('Заявка на волонтерскую книгу отправлена успешно!');
-        document.getElementById('book-application-form').reset();
-        document.getElementById('book-application-section').classList.add('hidden');
+        alert('Участник добавлен успешно!');
+        document.getElementById('participation-form').reset();
     }
 </script>
 </body>
