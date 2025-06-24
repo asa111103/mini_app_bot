@@ -346,6 +346,7 @@
     const isTelegram = window.Telegram && window.Telegram.WebApp;
 
     document.addEventListener('DOMContentLoaded', function() {
+        localStorage.clear();
 
         document.getElementById('apply-book-btn').addEventListener('click', function() {
             document.getElementById('book-application-section').classList.remove('hidden');
