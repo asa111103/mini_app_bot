@@ -374,6 +374,23 @@
         displayBookApplicationStatus();
     }
 
+    function showAdminDashboard() {
+        document.getElementById('register-section').classList.add('hidden');
+        document.getElementById('login-section').classList.add('hidden');
+        document.getElementById('dashboard-section').classList.add('hidden');
+        document.getElementById('event-section').classList.remove('hidden'); // Показать раздел добавления мероприятий
+        document.getElementById('participation-section').classList.remove('hidden'); // Показать раздел добавления участников
+        // Здесь можно добавить логику для отображения статистики мероприятий
+        const events = JSON.parse(localStorage.getItem('events') || '[]');
+        const eventsList = document.getElementById('admin-events-list');
+        eventsList.innerHTML = ''; // Очищаем предыдущие данные
+        events.forEach(event => {
+            const eventItem = document.createElement('div');
+            eventItem.textContent = `${event.Название_мероприятия} (${event.Дата_начала} - ${event.Дата_окончания})`;
+            eventsList.appendChild(eventItem);
+        });
+    }
+
     function displayBookApplicationStatus() {
         const bookApplications = JSON.parse(localStorage.getItem('bookApplications') || '[]');
         const currentUser  = JSON.parse(localStorage.getItem('currentUser   '));
